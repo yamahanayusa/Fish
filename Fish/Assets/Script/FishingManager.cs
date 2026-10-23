@@ -1,13 +1,17 @@
+using System.Collections.Generic;
 using UnityEngine;
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
 
 public enum FishingState
 {
-    Idle,       // 待機
-    Casting,    // キャスト中（ルアー飛翔中）
-    Waiting,    // アタリ待ち（着水後）
-    Reeling,    // 格闘・巻き取り中
-    Caught,     // 釣り上げ成功
-    Failed      // 失敗・糸切れ
+    Idle,           // 待機中
+    Aiming,         // 右クリック構え中
+    Casting,        // ルアー飛翔中
+    WaitingInWater, // 着水～誘い
+    ReelingFight,   // ヒット後の格闘
+    Caught          // 陸揚げ完了
 }
 
 public class FishingManager : MonoBehaviour
@@ -19,13 +23,22 @@ public class FishingManager : MonoBehaviour
 
     [Header("参照・プレハブ")]
     [SerializeField] private GameObject lurePrefab;
-    [SerializeField] private Transform rodTipTransform; // 竿の先端位置（仮）
+    [SerializeField] private Transform rodTipTransform;
 
-    [Header("キャスト設定")]
-    [SerializeField] private float castForce = 12f;
+    [Header("ルアー別ドロップテーブルリスト")]
+    [SerializeField] private List<FishingLureTable> lureTables;
+
+    [Header("パラメータ")]
+    [SerializeField] private float castForce = 10f;
+    [SerializeField] private float reelSpeed = 3f;
+    [SerializeField] private float fastReelSpeed = 6f;
 
     private GameObject currentLureObj;
-    private Fish activeFish;
+    private Lure currentLure;
+    private GameObject activeFishObj;
+
+    private float lastClickTime = 0f;
+    private float multiClickThreshold = 0.25f;
 
     private void Awake()
     {
@@ -35,79 +48,199 @@ public class FishingManager : MonoBehaviour
 
     private void Update()
     {
-        // デバッグテスト用：スペースキーでキャスト実行
-        if (Input.GetKeyDown(KeyCode.Space) && CurrentState == FishingState.Idle)
+        HandleInput();
+    }
+
+    private void HandleInput()
+    {
+        bool isRightPressed = false, isRightReleased = false, isRightDownThisFrame = false;
+        bool isLeftPressed = false, isLeftDownThisFrame = false;
+
+#if ENABLE_INPUT_SYSTEM
+        if (Mouse.current != null)
         {
-            CastLure(rodTipTransform != null ? rodTipTransform.position : transform.position + Vector3.up);
+            isRightPressed = Mouse.current.rightButton.isPressed;
+            isRightReleased = Mouse.current.rightButton.wasReleasedThisFrame;
+            isRightDownThisFrame = Mouse.current.rightButton.wasPressedThisFrame;
+            isLeftPressed = Mouse.current.leftButton.isPressed;
+            isLeftDownThisFrame = Mouse.current.leftButton.wasPressedThisFrame;
+        }
+#else
+        isRightPressed = Input.GetMouseButton(1);
+        isRightReleased = Input.GetMouseButtonUp(1);
+        isRightDownThisFrame = Input.GetMouseButtonDown(1);
+        isLeftPressed = Input.GetMouseButton(0);
+        isLeftDownThisFrame = Input.GetMouseButtonDown(0);
+#endif
+
+        if (CurrentState == FishingState.Idle && isRightPressed)
+        {
+            CurrentState = FishingState.Aiming;
+            Debug.Log("【状態】竿を構えました");
+        }
+
+        if (CurrentState == FishingState.Aiming && isRightReleased)
+        {
+            CastLure();
+        }
+
+        if (CurrentState == FishingState.WaitingInWater && isLeftPressed)
+        {
+            if (currentLure != null && rodTipTransform != null)
+            {
+                currentLure.ReelTowards(rodTipTransform.position, reelSpeed * Time.deltaTime);
+            }
+        }
+
+        if (CurrentState == FishingState.ReelingFight)
+        {
+            float speed = reelSpeed;
+
+            if (isLeftDownThisFrame)
+            {
+                if (Time.time - lastClickTime < multiClickThreshold) speed = fastReelSpeed;
+                lastClickTime = Time.time;
+            }
+            else if (isLeftPressed)
+            {
+                speed = reelSpeed;
+            }
+
+            if (isLeftPressed || isLeftDownThisFrame)
+            {
+                ReelFishIn(speed);
+            }
+        }
+
+        // ★ 追加：陸揚げ完了後に右クリックでリリース（AI起動）
+        if (CurrentState == FishingState.Caught && isRightDownThisFrame)
+        {
+            ReleaseFish();
         }
     }
 
-    /// <summary>
-    /// キャスト処理（別メンバーのプレイヤーから呼ぶことも可能）
-    /// </summary>
-    public void CastLure(Vector3 spawnPosition)
+    private void CastLure()
     {
-        if (CurrentState != FishingState.Idle) return;
-
         CurrentState = FishingState.Casting;
-        Debug.Log("キャスト！ルアーを投げます。");
+        Debug.Log("【状態】キャスト！");
 
-        // ルアーの生成
-        currentLureObj = Instantiate(lurePrefab, spawnPosition, Quaternion.identity);
+        Vector3 spawnPos = rodTipTransform != null ? rodTipTransform.position : transform.position + Vector3.up;
+        currentLureObj = Instantiate(lurePrefab, spawnPos, Quaternion.identity);
+        currentLure = currentLureObj.GetComponent<Lure>();
+
         Rigidbody lureRb = currentLureObj.GetComponent<Rigidbody>();
-
         if (lureRb != null)
         {
-            // 斜め前上へ飛ばす
-            Vector3 throwDirection = (transform.forward + Vector3.up * 0.5f).normalized;
-            lureRb.AddForce(throwDirection * castForce, ForceMode.Impulse);
-        }
+            Vector3 playerForward = Vector3.forward;
 
-        // 仮で「1秒後に着水した」とする（実際は水面ColliderのTrigger検知等で行う）
-        Invoke(nameof(SimulateWaterLanding), 1.2f);
+            if (rodTipTransform != null)
+            {
+                playerForward = rodTipTransform.parent != null ? rodTipTransform.parent.forward : rodTipTransform.forward;
+            }
+
+            Vector3 throwDir = (playerForward + Vector3.up * 0.4f).normalized;
+            lureRb.AddForce(throwDir * castForce, ForceMode.Impulse);
+        }
     }
 
-    private void SimulateWaterLanding()
+    public void OnLureLanded()
     {
         if (CurrentState != FishingState.Casting) return;
+        CurrentState = FishingState.WaitingInWater;
+        Debug.Log("【状態】着水。左長押しで巻き取ってください。");
+    }
 
-        CurrentState = FishingState.Waiting;
-        Lure lure = currentLureObj.GetComponent<Lure>();
-        if (lure != null)
+    public void OnFishHitAtPosition(Vector3 hitPosition, string lureID)
+    {
+        if (CurrentState != FishingState.WaitingInWater) return;
+
+        CurrentState = FishingState.ReelingFight;
+
+        FishingLureTable targetTable = lureTables.Find(t => t.lureID == lureID);
+        if (targetTable != null)
         {
-            lure.OnLandOnWater();
+            activeFishObj = targetTable.SpawnRandomFish(hitPosition, Quaternion.identity);
+
+            // 釣られている間はAIと重力をオフにする
+            var fishAI = activeFishObj.GetComponent<Fish>();
+            if (fishAI != null) fishAI.enabled = false;
+
+            var fishRb = activeFishObj.GetComponent<Rigidbody>();
+            if (fishRb != null) fishRb.isKinematic = true;
+
+            Debug.Log($"【ヒット！】{activeFishObj.name} が表示されました！");
         }
     }
 
-    /// <summary>
-    /// 魚が食いついた時（Lure.cs から通知される）
-    /// </summary>
-    public void OnFishHit(Fish fish, Lure lure)
+    public void OnLureRetrieved()
     {
-        CurrentState = FishingState.Reeling;
-        activeFish = fish;
-
-        Debug.Log($"ファイト開始！ ターゲット: {fish.name}");
-        // ここから巻き取りミニゲーム・テンション計算へ遷移
-    }
-
-    /// <summary>
-    /// ヒットしなかった場合
-    /// </summary>
-    public void OnHitFailed()
-    {
-        CurrentState = FishingState.Failed;
+        if (CurrentState != FishingState.WaitingInWater) return;
         ResetFishing();
     }
 
+    private void ReelFishIn(float speed)
+    {
+        if (activeFishObj == null || rodTipTransform == null) return;
+
+        Vector3 targetPos = rodTipTransform.position;
+        activeFishObj.transform.position = Vector3.MoveTowards(activeFishObj.transform.position, targetPos, speed * Time.deltaTime);
+
+        if (currentLureObj != null)
+        {
+            currentLureObj.transform.position = activeFishObj.transform.position;
+        }
+
+        float distance = Vector3.Distance(activeFishObj.transform.position, targetPos);
+        if (distance < 1.5f)
+        {
+            OnCatchSuccess();
+        }
+    }
+
+    private void OnCatchSuccess()
+    {
+        CurrentState = FishingState.Caught;
+        Debug.Log("【釣獲成功！】右クリックで魚を離します。");
+        // 自動リセットを廃止
+    }
+
     /// <summary>
-    /// リセット処理
+    /// ★ 追加：魚をルアーから離してAIを起動する処理
     /// </summary>
+    private void ReleaseFish()
+    {
+        if (activeFishObj != null)
+        {
+            // 物理演算（重力）を再開
+            Rigidbody fishRb = activeFishObj.GetComponent<Rigidbody>();
+            if (fishRb != null) fishRb.isKinematic = false;
+
+            // AI挙動（Fish.cs）をONにする
+            Fish fishAI = activeFishObj.GetComponent<Fish>();
+            if (fishAI != null) fishAI.enabled = true;
+
+            Debug.Log($"【リリース】{activeFishObj.name} を地面に落とし、AIを起動しました！");
+
+            // FishingManagerの管理から外す（Reset時に消去されないようにする）
+            activeFishObj = null;
+        }
+
+        // ルアーだけをリセットして次の釣りに備える
+        ResetFishing();
+    }
+
     public void ResetFishing()
     {
         if (currentLureObj != null) Destroy(currentLureObj);
-        activeFish = null;
+
+        // 陸揚げ完了前（途中でキャンセルされた場合など）のみ魚モデルを消去
+        if (activeFishObj != null) Destroy(activeFishObj);
+
+        activeFishObj = null;
         CurrentState = FishingState.Idle;
-        Debug.Log("釣りをリセットし、待機状態に戻りました。");
+        Debug.Log("【リセット】待機状態（Idle）に戻りました。");
     }
+
+    public Transform GetRodTip() => rodTipTransform;
+    public GameObject GetCurrentLure() => currentLureObj;
 }

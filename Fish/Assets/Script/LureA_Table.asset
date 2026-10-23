@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0ad663226cde7b40a80a7bb1fedf5b5, type: 3}
+  m_Name: LureA_Table
+  m_EditorClassIdentifier: Assembly-CSharp::FishingLureTable
+  lureID: LureA
+  fishPrefabs:
+  - {fileID: 5178124275650449743, guid: 2536f799bade61d46bdad49c6b4984a3, type: 3}
+  - {fileID: 2519893597770891407, guid: 496fc2e43941e1f48805ed489b56ebee, type: 3}

@@ -1,69 +1,77 @@
 using UnityEngine;
-using System.Collections;
 
+[RequireComponent(typeof(Rigidbody))]
 public class Lure : MonoBehaviour
 {
-    [Header("ヒット設定")]
-    [Tooltip("魚を引き寄せる範囲（半径）")]
-    [SerializeField] private float detectionRadius = 5f;
+    [Header("ルアー設定")]
+    [SerializeField] private string lureID = "LureA";
 
-    [Tooltip("アタリが来てからヒットするまでの待ち時間（最小/最大）")]
-    [SerializeField] private float minWaitTime = 2f;
-    [SerializeField] private float maxWaitTime = 5f;
+    [Header("ヒット確率設定")]
+    [Tooltip("巻き取り中にフレームごとにヒットする確率（%）")]
+    [Range(0.1f, 10f)]
+    [SerializeField] private float biteChancePercent = 1.5f;
 
-    private bool isWaterland = false;
-    private Fish targetFish = null;
+    [Header("回収判定距離")]
+    [SerializeField] private float retrieveDistance = 1.0f;
 
-    /// <summary>
-    /// 着水時に呼ばれる（FishingManagerから制御）
-    /// </summary>
-    public void OnLandOnWater()
+    private bool isGroundedOrWater = false;
+    private bool hasHit = false;
+    private Rigidbody rb;
+
+    public string LureID => lureID;
+
+    private void Awake()
     {
-        if (isWaterland) return;
-        isWaterland = true;
+        rb = GetComponent<Rigidbody>();
+    }
 
-        Debug.Log("ルアーが着水しました。魚を探索中...");
-        StartCoroutine(WaitForBiteRoutine());
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (!isGroundedOrWater)
+        {
+            isGroundedOrWater = true;
+            rb.isKinematic = true;
+            FishingManager.Instance?.OnLureLanded();
+        }
     }
 
     /// <summary>
-    /// アタリ待ちルーチン
+    /// マウス左長押しでプレイヤー方向へ手繰り寄せられる処理
     /// </summary>
-    private IEnumerator WaitForBiteRoutine()
+    public void ReelTowards(Vector3 targetPosition, float step)
     {
-        // ランダムな待ち時間
-        float waitTime = Random.Range(minWaitTime, maxWaitTime);
-        yield return new WaitForSeconds(waitTime);
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, step);
 
-        // 周囲の魚を検知
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, detectionRadius);
-        foreach (var col in hitColliders)
+        // 1. まだヒットしていない場合、一定確率でヒット判定
+        if (!hasHit)
         {
-            Fish fish = col.GetComponentInParent<Fish>();
-            if (fish != null)
+            TryRollForBite();
+        }
+
+        // 2. 魚がヒットしていない状態で手元まで戻ったかチェック
+        if (!hasHit)
+        {
+            float distance = Vector3.Distance(transform.position, targetPosition);
+            if (distance <= retrieveDistance)
             {
-                targetFish = fish;
-                break;
+                Debug.Log("【ルアー回収】ヒットせずに手元まで戻りました。");
+                FishingManager.Instance?.OnLureRetrieved();
             }
         }
-
-        if (targetFish != null)
-        {
-            Debug.Log($"ヒット！ {targetFish.gameObject.name} が食いつきました！");
-            // FishingManagerへヒット通知
-            FishingManager.Instance?.OnFishHit(targetFish, this);
-        }
-        else
-        {
-            Debug.Log("アタリがありませんでした。もう一度キャストしてください。");
-            FishingManager.Instance?.OnHitFailed();
-        }
     }
 
-    private void OnDrawGizmosSelected()
+    /// <summary>
+    /// アタリの確率抽選
+    /// </summary>
+    private void TryRollForBite()
     {
-        // ギズモで検知範囲を可視化
-        Gizmos.color = Color.cyan;
-        Gizmos.DrawWireSphere(transform.position, detectionRadius);
+        float roll = Random.Range(0f, 100f);
+        if (roll < biteChancePercent)
+        {
+            hasHit = true;
+            Debug.Log("【アタリ！】魚が食いつきました！");
+            // ヒット位置（ルアーの現在地）とルアーIDを伝える
+            FishingManager.Instance?.OnFishHitAtPosition(transform.position, lureID);
+        }
     }
 }

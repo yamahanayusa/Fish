@@ -1,0 +1,201 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5178124275650449743
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5017861609928412704}
+  - component: {fileID: 4865610424927051121}
+  - component: {fileID: 6700279539804848716}
+  - component: {fileID: 1900669339444052953}
+  - component: {fileID: 1165951825214512106}
+  m_Layer: 0
+  m_Name: Shrimp_Parent
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5017861609928412704
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5178124275650449743}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.04886, y: 3.11453, z: -0.67435}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5637237189444685972}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &4865610424927051121
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5178124275650449743}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
+--- !u!114 &6700279539804848716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5178124275650449743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 837d612313369a04aafd7d15a2f4902d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Fish
+  fishData: {fileID: 11400000, guid: 8529a0e5b717e6e41a1646f08bc9b2df, type: 2}
+  forwardJumpForce: 2
+  randomAngleOffset: 60
+--- !u!114 &1900669339444052953
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5178124275650449743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c40a779854ab9f646ace78a1d0db7fc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishTest
+  minJumpInterval: 1
+  maxJumpInterval: 2.5
+--- !u!65 &1165951825214512106
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5178124275650449743}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.3, y: 0.5, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!1001 &5310241104237803391
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 5017861609928412704}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.07564437
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.14894629
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.11435002
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.70207196
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.712106
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90.813
+      objectReference: {fileID: 0}
+    - target: {fileID: -2266319289475385075, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -2266319289475385075, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -2266319289475385075, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -322092207955694357, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -322092207955694357, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: -322092207955694357, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.97
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+      propertyPath: m_Name
+      value: Shrimp_Rigged_Unity
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+--- !u!4 &5637237189444685972 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: da4a6439be4fce94186cb570d4d93e97, type: 3}
+  m_PrefabInstance: {fileID: 5310241104237803391}
+  m_PrefabAsset: {fileID: 0}
