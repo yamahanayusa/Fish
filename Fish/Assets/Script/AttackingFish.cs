@@ -43,6 +43,8 @@ public class AttackingFish : MonoBehaviour
     {
         if (fishData == null || playerTransform == null) return;
 
+        rb.linearVelocity = Vector3.zero; // 現在の速度をリセット
+
         // 基本の跳ね上げ（上方向）
         Vector3 jumpDirection = Vector3.up * fishData.jumpPower;
 
@@ -58,7 +60,7 @@ public class AttackingFish : MonoBehaviour
             Vector3 finalDirection = Quaternion.Euler(0, angle, 0) * directionToPlayer;
 
             // 進行方向（Y軸回転）をプレイヤーに向かせる
-            transform.rotation = Quaternion.LookRotation(finalDirection);
+            //transform.rotation = Quaternion.LookRotation(finalDirection);
 
             // 推進力を付与
             jumpDirection += finalDirection * attackJumpForce;

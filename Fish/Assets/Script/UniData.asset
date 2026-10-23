@@ -15,7 +15,7 @@ MonoBehaviour:
   fishName: "\u65B0\u3057\u3044\u9B5A"
   fishIcon: {fileID: 0}
   maxHealth: 100
-  jumpPower: 5
+  jumpPower: 0
   defaultMoveDirection: 1
   attackPower: 10
   sellPrice: 100
