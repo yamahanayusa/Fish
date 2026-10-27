@@ -32,6 +32,7 @@ public class FishingManager : MonoBehaviour
     [SerializeField] private float castForce = 10f;
     [SerializeField] private float reelSpeed = 3f;
     [SerializeField] private float fastReelSpeed = 6f;
+    [SerializeField] private float waterLevelY = -3f;
 
     private GameObject currentLureObj;
     private Lure currentLure;
@@ -73,17 +74,27 @@ public class FishingManager : MonoBehaviour
         isLeftDownThisFrame = Input.GetMouseButtonDown(0);
 #endif
 
-        if (CurrentState == FishingState.Idle && isRightPressed)
+        // 1. まず陸揚げ完了後のリリース処理を判定
+        if ((CurrentState == FishingState.Caught || CurrentState == FishingState.ReelingFight) && isRightDownThisFrame)
+        {
+            ReleaseFish();
+            return; // 魚を離したフレームはここで処理を終了し、構えへの誤爆を防ぐ
+        }
+
+        // 2. 待機中からの構え判定（「押している間」から「押した瞬間」に変更）
+        if (CurrentState == FishingState.Idle && isRightDownThisFrame)
         {
             CurrentState = FishingState.Aiming;
             Debug.Log("【状態】竿を構えました");
         }
 
+        // 3. 構え中 -> キャスト（離した瞬間）
         if (CurrentState == FishingState.Aiming && isRightReleased)
         {
             CastLure();
         }
 
+        // 4. 着水後の引き寄せ
         if (CurrentState == FishingState.WaitingInWater && isLeftPressed)
         {
             if (currentLure != null && rodTipTransform != null)
@@ -92,6 +103,7 @@ public class FishingManager : MonoBehaviour
             }
         }
 
+        // 5. ヒット後の格闘
         if (CurrentState == FishingState.ReelingFight)
         {
             float speed = reelSpeed;
@@ -110,12 +122,6 @@ public class FishingManager : MonoBehaviour
             {
                 ReelFishIn(speed);
             }
-        }
-
-        // ★ 追加：陸揚げ完了後に右クリックでリリース（AI起動）
-        if (CurrentState == FishingState.Caught && isRightDownThisFrame)
-        {
-            ReleaseFish();
         }
     }
 
@@ -161,9 +167,12 @@ public class FishingManager : MonoBehaviour
         {
             activeFishObj = targetTable.SpawnRandomFish(hitPosition, Quaternion.identity);
 
-            // 釣られている間はAIと重力をオフにする
+            // Fish と AttackingFish の両方を探して、ついていればOFFにする
             var fishAI = activeFishObj.GetComponent<Fish>();
             if (fishAI != null) fishAI.enabled = false;
+
+            var attackingAI = activeFishObj.GetComponent<AttackingFish>();
+            if (attackingAI != null) attackingAI.enabled = false;
 
             var fishRb = activeFishObj.GetComponent<Rigidbody>();
             if (fishRb != null) fishRb.isKinematic = true;
@@ -205,27 +214,35 @@ public class FishingManager : MonoBehaviour
     }
 
     /// <summary>
-    /// ★ 追加：魚をルアーから離してAIを起動する処理
+    /// 魚をルアーから離してAIを起動する処理
     /// </summary>
     private void ReleaseFish()
     {
         if (activeFishObj != null)
         {
-            // 物理演算（重力）を再開
-            Rigidbody fishRb = activeFishObj.GetComponent<Rigidbody>();
-            if (fishRb != null) fishRb.isKinematic = false;
+            if (activeFishObj.transform.position.y <= waterLevelY)
+            {
+                Debug.Log($"【リリース】{activeFishObj.name} は海へ逃げていきました。（モデル消去）");
+                Destroy(activeFishObj);
+            }
+            else
+            {
+                Rigidbody fishRb = activeFishObj.GetComponent<Rigidbody>();
+                if (fishRb != null) fishRb.isKinematic = false;
 
-            // AI挙動（Fish.cs）をONにする
-            Fish fishAI = activeFishObj.GetComponent<Fish>();
-            if (fishAI != null) fishAI.enabled = true;
+                // ★ リリース時に Fish と AttackingFish の両方をONにする
+                Fish fishAI = activeFishObj.GetComponent<Fish>();
+                if (fishAI != null) fishAI.enabled = true;
 
-            Debug.Log($"【リリース】{activeFishObj.name} を地面に落とし、AIを起動しました！");
+                AttackingFish attackingAI = activeFishObj.GetComponent<AttackingFish>();
+                if (attackingAI != null) attackingAI.enabled = true;
 
-            // FishingManagerの管理から外す（Reset時に消去されないようにする）
+                Debug.Log($"【リリース】{activeFishObj.name} を地面に落とし、AIを起動しました！");
+            }
+
             activeFishObj = null;
         }
 
-        // ルアーだけをリセットして次の釣りに備える
         ResetFishing();
     }
 
