@@ -6,6 +6,10 @@ public class Fish : MonoBehaviour
     [Header("データソース")]
     [SerializeField] private FishData fishData;
 
+    [Header("環境設定")]
+    [Tooltip("この高さ以下に落ちたら海に逃げた判定にして消去する")]
+    [SerializeField] private float waterLevelY = -1f;
+
     [Header("逃走・暴れパラメータ")]
     [Tooltip("一度のジャンプで横方向に進む推進力")]
     [SerializeField] private float forwardJumpForce = 3f;
@@ -39,7 +43,15 @@ public class Fish : MonoBehaviour
         }
     }
 
-    // ★ Update() 内での毎フレーム回転処理は削除しました（落下中の回転を防ぐため）
+    private void Update()
+    {
+        // 海（水面）に落ちたかどうかの判定
+        if (transform.position.y <= waterLevelY)
+        {
+            Debug.Log($"【AI魚】{gameObject.name} は海へ逃げ込みました。（モデル消去）");
+            Destroy(gameObject);
+        }
+    }
 
     public void Initialize(FishData data)
     {
@@ -73,7 +85,7 @@ public class Fish : MonoBehaviour
             float angle = Random.Range(-randomAngleOffset, randomAngleOffset);
             Vector3 finalDirection = Quaternion.Euler(0, angle, 0) * baseAwayDirection;
 
-            // ★【ポイント】跳ねる「瞬間」にだけ進行方向を向かせる
+            // 跳ねる「瞬間」にだけ進行方向を向かせる
             transform.rotation = Quaternion.LookRotation(finalDirection);
 
             // 上方向への力 + ブレを含んだ外側への推進力

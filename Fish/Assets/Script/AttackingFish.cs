@@ -6,6 +6,10 @@ public class AttackingFish : MonoBehaviour
     [Header("データソース")]
     [SerializeField] private FishData fishData;
 
+    [Header("環境設定")]
+    [Tooltip("この高さ以下に落ちたら海に逃げた判定にして消去する")]
+    [SerializeField] private float waterLevelY = -1f; // FishingManager等と同じ値にします
+
     [Header("攻撃跳ねパラメータ")]
     [Tooltip("プレイヤーへ向かって進む推進力")]
     [SerializeField] private float attackJumpForce = 5f;
@@ -34,6 +38,21 @@ public class AttackingFish : MonoBehaviour
         {
             Debug.LogWarning("Playerタグがついたオブジェクトが見つかりません。");
         }
+    }
+
+    private void Update()
+    {
+        // 水面より下に落ちたかどうかの判定
+        if (transform.position.y <= waterLevelY)
+        {
+            Debug.Log($"【AI魚(攻撃)】{gameObject.name} は海へ逃げ込みました。（モデル消去）");
+            Destroy(gameObject);
+            return; // 消去後はこれ以降の処理を行わない
+        }
+
+        // ---------------------------------------------------
+        // これより下は、既存のAI処理（プレイヤー追従など）があればそのまま残す
+        // ---------------------------------------------------
     }
 
     /// <summary>
