@@ -39,7 +39,8 @@ public class FishingManager : MonoBehaviour
     private GameObject activeFishObj;
 
     private float lastClickTime = 0f;
-    private float multiClickThreshold = 0.25f;
+    private float multiClickThreshold = 0.3f;
+    private float fastReelEndTime = 0f;
 
     private void Awake()
     {
@@ -106,21 +107,30 @@ public class FishingManager : MonoBehaviour
         // 5. ヒット後の格闘
         if (CurrentState == FishingState.ReelingFight)
         {
-            float speed = reelSpeed;
-
+            // ① クリックされた瞬間の判定（連打チェック）
             if (isLeftDownThisFrame)
             {
-                if (Time.time - lastClickTime < multiClickThreshold) speed = fastReelSpeed;
+                if (Time.time - lastClickTime < multiClickThreshold)
+                {
+                    // 連打成功！0.3秒間は高速巻き取りモードを維持する
+                    fastReelEndTime = Time.time + 0.3f;
+                }
                 lastClickTime = Time.time;
             }
-            else if (isLeftPressed)
+
+            // ② スピードの決定（余韻中は常に高速）
+            float currentSpeed = reelSpeed;
+            bool isFastReeling = (Time.time < fastReelEndTime);
+
+            if (isFastReeling)
             {
-                speed = reelSpeed;
+                currentSpeed = fastReelSpeed;
             }
 
-            if (isLeftPressed || isLeftDownThisFrame)
+            // ③ 巻き取り実行（長押し中、または連打モード中は巻き取る）
+            if (isLeftPressed || isFastReeling)
             {
-                ReelFishIn(speed);
+                ReelFishIn(currentSpeed);
             }
         }
     }
