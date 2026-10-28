@@ -36,7 +36,7 @@ public class Fish : MonoBehaviour
             Initialize(fishData);
         }
 
-        GameObject islandObj = GameObject.Find("Cube");
+        GameObject islandObj = GameObject.Find("Island_3 Variant");
         if (islandObj != null)
         {
             centerTransform = islandObj.transform;
