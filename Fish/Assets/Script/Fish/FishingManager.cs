@@ -82,7 +82,7 @@ public class FishingManager : MonoBehaviour
             return; // 魚を離したフレームはここで処理を終了し、構えへの誤爆を防ぐ
         }
 
-        // 2. 待機中からの構え判定（「押している間」から「押した瞬間」に変更）
+        // 2. 待機中からの構え判定
         if (CurrentState == FishingState.Idle && isRightDownThisFrame)
         {
             CurrentState = FishingState.Aiming;
@@ -240,7 +240,7 @@ public class FishingManager : MonoBehaviour
                 Rigidbody fishRb = activeFishObj.GetComponent<Rigidbody>();
                 if (fishRb != null) fishRb.isKinematic = false;
 
-                // ★ リリース時に Fish と AttackingFish の両方をONにする
+                // リリース時に Fish と AttackingFish の両方をONにする
                 Fish fishAI = activeFishObj.GetComponent<Fish>();
                 if (fishAI != null) fishAI.enabled = true;
 
