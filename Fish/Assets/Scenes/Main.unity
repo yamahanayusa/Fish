@@ -1164,6 +1164,9 @@ MonoBehaviour:
   maxSpeed: 5
   acceleration: 2
   turnSpeed: 40
+  isPiloting: 0
+  playerTransform: {fileID: 1882758625}
+  fpsController: {fileID: 1882758627}
 --- !u!114 &1542000310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1583,6 +1586,7 @@ MonoBehaviour:
   playerCamera: {fileID: 1531833401}
   moveSpeed: 5
   jumpForce: 5
+  isPilotingBoat: 0
 --- !u!1 &2007004212
 GameObject:
   m_ObjectHideFlags: 0

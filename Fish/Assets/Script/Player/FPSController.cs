@@ -15,6 +15,9 @@ public class FPSController : MonoBehaviour
     private Rigidbody rb;
     private bool isGrounded;
 
+    // ボートに乗っているかどうかのフラグ
+    [HideInInspector] public bool isPilotingBoat = false;
+
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -47,6 +50,9 @@ public class FPSController : MonoBehaviour
         // プレイヤーの左右回転
         transform.Rotate(Vector3.up * mouseX);
 
+        // ボートに乗っているときは、プレイヤー自身のジャンプ入力を受け付けない
+        if (isPilotingBoat) return;
+
         // 2. ジャンプ（Update内で入力を取るのが最も確実）
         if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
         {
@@ -57,6 +63,9 @@ public class FPSController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // ボートに乗っているときは移動入力を受け付けない
+        if (isPilotingBoat) return;
+
         // 3. WASDキーによる移動
         float moveX = Input.GetAxis("Horizontal");
         float moveZ = Input.GetAxis("Vertical");
