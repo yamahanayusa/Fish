@@ -4,15 +4,15 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 #endif
 
-public enum FishingState
-{
-    Idle,           // 待機中
-    Aiming,         // 右クリック構え中
-    Casting,        // ルアー飛翔中
-    WaitingInWater, // 着水～誘い
-    ReelingFight,   // ヒット後の格闘
-    Caught          // 陸揚げ完了
-}
+//public enum FishingState
+//{
+//    Idle,           // 待機中
+//    Aiming,         // 右クリック構え中
+//    Casting,        // ルアー飛翔中
+//    WaitingInWater, // 着水～誘い
+//    ReelingFight,   // ヒット後の格闘
+//    Caught          // 陸揚げ完了
+//}
 
 public class FishingManager : MonoBehaviour
 {
