@@ -90,8 +90,10 @@ public class SquidBoss : MonoBehaviour
         Debug.Log("【ボス攻撃】イカ墨！");
         if (inkPrefab != null && inkSpawnPoint != null && player != null)
         {
-            // プレイヤーの方向を向く
-            Vector3 direction = (player.position - inkSpawnPoint.position).normalized;
+            // 修正：プレイヤーの足元ではなく、高さ(Y)を少し上（胸のあたり）にずらして狙う
+            Vector3 targetPos = player.position + Vector3.up * 0.5f;
+            Vector3 direction = (targetPos - inkSpawnPoint.position).normalized;
+
             transform.rotation = Quaternion.LookRotation(direction);
 
             // イカ墨の弾を生成して飛ばす
