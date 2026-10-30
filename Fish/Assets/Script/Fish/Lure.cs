@@ -71,7 +71,7 @@ public class Lure : MonoBehaviour
             hasHit = true;
             Debug.Log("【アタリ！】魚が食いつきました！");
             // ヒット位置（ルアーの現在地）とルアーIDを伝える
-            FishingManager.Instance?.OnFishHitAtPosition(transform.position, lureID);
+            FishingManager.Instance?.OnFishHitAtPosition(transform.position, FishingManager.Instance.currentlureID);
         }
     }
 }
