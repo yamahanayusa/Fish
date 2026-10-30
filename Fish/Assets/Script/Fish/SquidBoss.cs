@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(Rigidbody))]
 public class SquidBoss : MonoBehaviour
@@ -122,13 +123,10 @@ public class SquidBoss : MonoBehaviour
         isBattling = false;
         Debug.Log("【ボス討伐】イカを倒した！");
 
-        // ※ここで GameLoopManager のクリア処理を呼び出す
-        GameObject gm = GameObject.Find("GameManager");
-        if (gm != null)
-        {
-            // gm.GetComponent<GameLoopManager>().GameClear();
-        }
-
+        // ボス自身を消去
         Destroy(gameObject);
+
+        // Clearシーンへ移動する
+        SceneManager.LoadScene("Clear");
     }
 }
