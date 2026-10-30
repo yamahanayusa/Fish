@@ -21,6 +21,10 @@ public class FishingManager : MonoBehaviour
     [Header("現在の状態")]
     public FishingState CurrentState { get; private set; } = FishingState.Idle;
 
+    [Header("ルアー設定")]
+    [Tooltip("現在のルアーID")]
+    public string currentlureID = "NormalLure";
+
     [Header("参照・プレハブ")]
     [SerializeField] private GameObject lurePrefab;
     [SerializeField] private Transform rodTipTransform;
@@ -50,6 +54,21 @@ public class FishingManager : MonoBehaviour
 
     private void Update()
     {
+        //ルアーの切り替え
+        if(Input.GetKeyDown(KeyCode.B))
+        {
+            if(currentlureID=="NormalLure")
+            {
+                currentlureID= "BossLure";
+                Debug.Log("[ルアー変更] ボス用ルアーに切り替えました");
+            }
+            else
+            {
+                currentlureID= "NormalLure";
+                Debug.Log("[ルアー変更] 通常ルアーに切り替えました");
+            }
+        }
+
         HandleInput();
     }
 
@@ -240,19 +259,27 @@ public class FishingManager : MonoBehaviour
                 Rigidbody fishRb = activeFishObj.GetComponent<Rigidbody>();
                 if (fishRb != null) fishRb.isKinematic = false;
 
-                // リリース時に Fish と AttackingFish の両方をONにする
-                Fish fishAI = activeFishObj.GetComponent<Fish>();
-                if (fishAI != null) fishAI.enabled = true;
+                // ★追加：ボスの場合はボス戦を開始する
+                SquidBoss bossAI = activeFishObj.GetComponent<SquidBoss>();
+                if (bossAI != null)
+                {
+                    bossAI.StartBossBattle();
+                    Debug.Log("【リリース】ボス戦スタート！");
+                }
+                else
+                {
+                    // 通常の魚AIの起動
+                    Fish fishAI = activeFishObj.GetComponent<Fish>();
+                    if (fishAI != null) fishAI.enabled = true;
 
-                AttackingFish attackingAI = activeFishObj.GetComponent<AttackingFish>();
-                if (attackingAI != null) attackingAI.enabled = true;
+                    AttackingFish attackingAI = activeFishObj.GetComponent<AttackingFish>();
+                    if (attackingAI != null) attackingAI.enabled = true;
 
-                Debug.Log($"【リリース】{activeFishObj.name} を地面に落とし、AIを起動しました！");
+                    Debug.Log($"【リリース】{activeFishObj.name} を地面に落とし、AIを起動しました！");
+                }
             }
-
             activeFishObj = null;
         }
-
         ResetFishing();
     }
 

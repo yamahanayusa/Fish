@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 807d50649d1f7174b80493bf77e2ece0, type: 3}
   m_Name: UniData
   m_EditorClassIdentifier: Assembly-CSharp::FishData
-  fishName: "\u65B0\u3057\u3044\u9B5A"
+  fishName: "\u30A6\u30CB"
   fishIcon: {fileID: 0}
   maxHealth: 100
   jumpPower: 0
