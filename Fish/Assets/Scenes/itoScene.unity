@@ -762,10 +762,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8852a2272f40fb742b559a50ee7d2120, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishingManager
+  currentlureID: NormalLure
   lurePrefab: {fileID: 83267991712719038, guid: b9e2670505490e54e870b648726e826e, type: 3}
   rodTipTransform: {fileID: 671653705}
   lureTables:
   - {fileID: 11400000, guid: 2d104da041e1b274bbfdaf9b9e615f19, type: 2}
+  - {fileID: 11400000, guid: 205ee6deaad03284e98a331caf9390ff, type: 2}
   castForce: 10
   reelSpeed: 3
   fastReelSpeed: 6
@@ -1164,6 +1166,9 @@ MonoBehaviour:
   maxSpeed: 5
   acceleration: 2
   turnSpeed: 40
+  isPiloting: 0
+  playerTransform: {fileID: 0}
+  fpsController: {fileID: 0}
 --- !u!114 &1542000310
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1583,6 +1588,7 @@ MonoBehaviour:
   playerCamera: {fileID: 1531833401}
   moveSpeed: 5
   jumpForce: 5
+  isPilotingBoat: 0
 --- !u!1 &2007004212
 GameObject:
   m_ObjectHideFlags: 0
