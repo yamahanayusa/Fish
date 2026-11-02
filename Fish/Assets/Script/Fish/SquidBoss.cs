@@ -44,6 +44,20 @@ public class SquidBoss : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        // プレイヤーにぶつかったらダメージを与える
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(35f); // 1回の突進ダメージ量
+                Debug.Log("【ボス攻撃】突進がプレイヤーにヒット！");
+            }
+        }
+    }
+
     // 釣り上げられた（リリースされた）時に外部（FishingManager等）から呼ぶ
     public void StartBossBattle()
     {
