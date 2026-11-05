@@ -117,6 +117,7 @@ MonoBehaviour:
   rodTipTransform: {fileID: 6722635361820680331}
   lureTables:
   - {fileID: 11400000, guid: 2d104da041e1b274bbfdaf9b9e615f19, type: 2}
+  - {fileID: 11400000, guid: 205ee6deaad03284e98a331caf9390ff, type: 2}
   castForce: 10
   reelSpeed: 3
   fastReelSpeed: 6

@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36032002e7644fc44aae5eef5bba9b25, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Inventory
+  testObject_: {fileID: 0}
   baseObject_: {fileID: 204886839932104096, guid: b9c74855e4c8d264994e7ea1a10b8ac4, type: 3}
 --- !u!1 &3792333512450589110
 GameObject:
@@ -196,12 +197,11 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3792333512450589110}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e017ec9be8e32c43ab775bba34f5012, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
-  itemBox_: {fileID: 0}
   eye_: {fileID: 6899386191094004449}
   hp_: 0
   moveSpeed_: 10

@@ -19,12 +19,6 @@ public class PlayerHealth : MonoBehaviour
     [SerializeField] private float reviveHoldTime = 2f;
     private float currentHoldTime = 0f;
 
-    [Header("チーム開発用：死亡・復活時のイベント")]
-    [Tooltip("死亡時に実行したい処理（移動スクリプトのオフなど）を登録")]
-    [SerializeField] private UnityEvent onDeathEvent; 
-    [Tooltip("復活時に実行したい処理（移動スクリプトのオンなど）を登録")]
-    [SerializeField] private UnityEvent onReviveEvent;
-
     private void Start()
     {
         currentHealth = maxHealth;
@@ -82,16 +76,39 @@ public class PlayerHealth : MonoBehaviour
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
         if (gameOverVolume != null) gameOverVolume.SetActive(true);
 
-        // 釣りの操作を無効化
         if (FishingManager.Instance != null)
         {
             FishingManager.Instance.enabled = false;
         }
 
-        // インスペクターで登録した「死亡時の処理」を実行
-        onDeathEvent?.Invoke();
+        // プレイヤーの移動を強制停止
+        Player playerScript = GetComponent<Player>();
+        if (playerScript != null)
+        {
+            playerScript.enabled = false;
+        }
 
-        // ReviveからDieへ移動。ゲームオーバーになった瞬間にボスを消す
+        // カメラ視点（CharactorCamera）を強制停止
+        CharactorCamera camScript = GetComponentInChildren<CharactorCamera>();
+        if (camScript != null)
+        {
+            camScript.enabled = false;
+        }
+
+        // インベントリを強制停止
+        Inventory inventoryScript = FindAnyObjectByType<Inventory>();
+        if (inventoryScript != null)
+        {
+            inventoryScript.enabled = false;
+        }
+
+        // 慣性で滑らないように速度を0にする
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.linearVelocity = Vector3.zero;
+        }
+
         SquidBoss boss = FindAnyObjectByType<SquidBoss>();
         if (boss != null)
         {
@@ -109,14 +126,20 @@ public class PlayerHealth : MonoBehaviour
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (gameOverVolume != null) gameOverVolume.SetActive(false);
 
-        // 操作を再び有効化し、釣りの状態をリセット
         if (FishingManager.Instance != null)
         {
             FishingManager.Instance.enabled = true;
             FishingManager.Instance.ResetFishing();
         }
 
-        // インスペクターで登録した「復活時の処理」を実行
-        onReviveEvent?.Invoke();
+        // 復活時：各スクリプトを有効化
+        Player playerScript = GetComponent<Player>();
+        if (playerScript != null) playerScript.enabled = true;
+
+        CharactorCamera camScript = GetComponentInChildren<CharactorCamera>();
+        if (camScript != null) camScript.enabled = true;
+
+        Inventory inventoryScript = FindAnyObjectByType<Inventory>();
+        if (inventoryScript != null) inventoryScript.enabled = true;
     }
 }
