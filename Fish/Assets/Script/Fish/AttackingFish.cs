@@ -6,6 +6,10 @@ public class AttackingFish : MonoBehaviour
     [Header("データソース")]
     [SerializeField] private FishData fishData;
 
+    [Header("ドロップ設定")]
+    [Tooltip("死亡時に生成する魚アイテムのPrefab")]
+    [SerializeField] private GameObject fishItemPrefab;
+
     [Header("環境設定")]
     [Tooltip("この高さ以下に落ちたら海に逃げた判定にして消去する")]
     [SerializeField] private float waterLevelY = -1f; // FishingManager等と同じ値にします
@@ -18,8 +22,13 @@ public class AttackingFish : MonoBehaviour
     [Range(0f, 45f)]
     [SerializeField] private float attackAngleOffset = 10f;
 
+    [Header("状態フラグ")]
+    public bool isDead = false; // 死亡したかの判定
+
     private Rigidbody rb;
     private Transform playerTransform;
+
+    public float CurrentHealth { get; private set; }
 
     private void Awake()
     {
@@ -28,6 +37,12 @@ public class AttackingFish : MonoBehaviour
 
     private void Start()
     {
+        // FishDataがアサインされていれば初期化
+        if (fishData != null)
+        {
+            Initialize(fishData);
+        }
+
         // "Player" タグがついたオブジェクトを検索
         GameObject playerObj = GameObject.FindWithTag("Player");
         if (playerObj != null)
@@ -50,9 +65,58 @@ public class AttackingFish : MonoBehaviour
             return; // 消去後はこれ以降の処理を行わない
         }
 
-        // ---------------------------------------------------
-        // これより下は、既存のAI処理（プレイヤー追従など）があればそのまま残す
-        // ---------------------------------------------------
+        // *テスト用*Vキーを押したらダメージを与える
+        if (Input.GetKeyDown(KeyCode.V) && !isDead)
+        {
+            TakeDamage(CurrentHealth);
+        }
+    }
+
+    public void Initialize(FishData data)
+    {
+        fishData = data;
+        if (fishData != null)
+        {
+            CurrentHealth = fishData.maxHealth;
+        }
+    }
+
+    /// <summary>
+    /// ダメージを受ける処理
+    /// </summary>
+    public void TakeDamage(float amount)
+    {
+        if (isDead) return; // 死んでたら何もしない
+
+        CurrentHealth -= amount;
+        Debug.Log($"【攻撃魚】に {amount} のダメージ！ 残りHP: {CurrentHealth}");
+
+        if (CurrentHealth <= 0f)
+        {
+            Die();
+        }
+    }
+
+    /// <summary>
+    /// HPが0になったときの死亡処理
+    /// </summary>
+    private void Die()
+    {
+        isDead = true;
+        Debug.Log("魚のHPが0になりました！アイテムをドロップして消去");
+
+        // ドロップ用Prefabが設定されていれば、現在の位置・回転で生成
+        if (fishItemPrefab != null)
+        {
+            Instantiate(fishItemPrefab, transform.position, transform.rotation);
+        }
+        else
+        {
+            Debug.LogWarning("FishItemPrefabが設定されていません！");
+        }
+
+        // 生きている魚本体は消去する
+        Destroy(gameObject);
     }
 
     /// <summary>
@@ -60,7 +124,7 @@ public class AttackingFish : MonoBehaviour
     /// </summary>
     public void JumpTowardsPlayer()
     {
-        if (fishData == null || playerTransform == null) return;
+        if (fishData == null || playerTransform == null || isDead) return;
 
         rb.linearVelocity = Vector3.zero; // 現在の速度をリセット
 

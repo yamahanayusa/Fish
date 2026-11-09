@@ -10,9 +10,13 @@ public class BoatController : MonoBehaviour
     private float currentSpeed = 0.0f; // 現在の実際のスピード
 
     [Header("乗り降りの設定")]
-    public bool isPiloting = false;     // ボートに乗って操縦しているかどうか
-    public Transform playerTransform;   // プレイヤーのオブジェクト
-    public FPSController fpsController; // プレイヤーの移動スクリプト
+    public bool isPiloting = false;         // ボートに乗って操縦しているかどうか
+    public Transform playerTransform;       // プレイヤーのオブジェクト
+    public FPSController fpsController;     // プレイヤーの移動スクリプト
+
+    [Header("乗船判定の設定")]
+    [Tooltip("何メートル以内でEキーを押せば乗れるか")]
+    [SerializeField] private float rideableDistance = 3.0f;
 
     void Start()
     {
@@ -28,34 +32,44 @@ public class BoatController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.E))
         {
-            isPiloting = !isPiloting; // 状態を反転
-
-            if (isPiloting)
+            // 乗っていないとき
+            if (!isPiloting)
             {
-                Debug.Log("ボートに乗りました！操作できます。");
-
                 if (playerTransform != null)
                 {
-                    playerTransform.SetParent(transform);
-                }
+                    // プレイヤーとの距離を毎フレームチェックして範囲内なら乗る
+                    float distance = Vector3.Distance(transform.position, playerTransform.position);
+                    if (distance <= rideableDistance)
+                    {
+                        isPiloting = true;
+                        Debug.Log("ボートに乗りました！操作できます。");
 
-                // プレイヤー自身の移動・視点操作をオフにする
-                if (fpsController != null)
-                {
-                    fpsController.isPilotingBoat = true;
+                        playerTransform.SetParent(transform);
+
+                        if (fpsController != null)
+                        {
+                            fpsController.isPilotingBoat = true;
+                        }
+                    }
+                    else
+                    {
+                        Debug.Log("ボートから離れすぎています。");
+                    }
                 }
             }
+            // すでに乗っているとき
             else
             {
+                isPiloting = false;
                 Debug.Log("ボートから降りました。");
 
-                // 降りたときの処理
                 if (playerTransform != null)
                 {
                     playerTransform.SetParent(null);
+                    // 降りたときに少しボートの横に押し出す
+                    playerTransform.position = transform.position + transform.right * 2f + Vector3.up * 0.5f;
                 }
 
-                // 移動ロックを解除
                 if (fpsController != null)
                 {
                     fpsController.isPilotingBoat = false;
