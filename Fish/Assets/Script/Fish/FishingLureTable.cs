@@ -4,7 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "FishingLureTable", menuName = "Fishing/Lure Table")]
 public class FishingLureTable : ScriptableObject
 {
-    public string lureID = "LureA";
+    public string lureID;
 
     [Tooltip("このルアーで釣れる魚のPrefabリスト")]
     public List<GameObject> fishPrefabs = new List<GameObject>();

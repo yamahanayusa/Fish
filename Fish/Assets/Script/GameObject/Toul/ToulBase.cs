@@ -2,12 +2,15 @@ using UnityEngine;
 public enum ToulType
 {
     Fist,
-    Gun
+    Gun,
+    Fish
 }
 
 public class ToulBase : MonoBehaviour
 {
     protected ToulType toulType_;
+    [SerializeField] protected GameObject rHand_;
+    [SerializeField] protected GameObject lHand_;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -27,5 +30,8 @@ public class ToulBase : MonoBehaviour
     {
         return toulType_;
     }
+
+    public GameObject GetRHand() { return rHand_; }
+    public GameObject GetLHand() { return lHand_; }
 }
 

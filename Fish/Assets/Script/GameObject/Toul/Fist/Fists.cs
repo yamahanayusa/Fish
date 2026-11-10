@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Fists : ToulBase
 {
-    [SerializeField] private GameObject RFist_;
-    [SerializeField] private GameObject LFist_;
+    [SerializeField] private GameObject rHandObject_;
+    [SerializeField] private GameObject lHandObject_;
 
     private Fist[] fists_ = new Fist[2];
     private bool nextFists_;
@@ -13,8 +13,8 @@ public class Fists : ToulBase
     void Start()
     {
         toulType_ = ToulType.Fist;
-        fists_[0] = RFist_.GetComponent<Fist>();
-        fists_[1] = LFist_.GetComponent<Fist>();
+        fists_[0] = rHand_.GetComponent<Fist>();
+        fists_[1] = lHand_.GetComponent<Fist>();
     }
 
     // Update is called once per frame
@@ -36,4 +36,8 @@ public class Fists : ToulBase
         }
         return false; 
     }
+
+    public GameObject GetRHandObject() { return rHandObject_; }
+    public GameObject GetLHandObject() { return lHandObject_; }
+
 }

@@ -214,6 +214,8 @@ public class FishingRod : ToulBase
         CurrentState = FishingState.ReelingFight;
 
         FishingLureTable targetTable = lureTables.Find(t => t.lureID == lureID);
+        Debug.Log(lureTables);
+
         if (targetTable != null)
         {
             activeFishObj = targetTable.SpawnRandomFish(hitPosition, Quaternion.identity);
