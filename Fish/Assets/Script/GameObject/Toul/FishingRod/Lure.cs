@@ -17,7 +17,7 @@ public class Lure : MonoBehaviour
     private bool isGroundedOrWater = false;
     private bool hasHit = false;
     private Rigidbody rb;
-
+    private FishingRod fishingRod_;
     public string LureID => lureID;
 
     private void Awake()
@@ -31,7 +31,7 @@ public class Lure : MonoBehaviour
         {
             isGroundedOrWater = true;
             rb.isKinematic = true;
-            FishingManager.Instance?.OnLureLanded();
+            fishingRod_.OnLureLanded();
         }
     }
 
@@ -55,7 +55,7 @@ public class Lure : MonoBehaviour
             if (distance <= retrieveDistance)
             {
                 Debug.Log("【ルアー回収】ヒットせずに手元まで戻りました。");
-                FishingManager.Instance?.OnLureRetrieved();
+                fishingRod_.OnLureRetrieved();
             }
         }
     }
@@ -71,7 +71,12 @@ public class Lure : MonoBehaviour
             hasHit = true;
             Debug.Log("【アタリ！】魚が食いつきました！");
             // ヒット位置（ルアーの現在地）とルアーIDを伝える
-            FishingManager.Instance?.OnFishHitAtPosition(transform.position, FishingManager.Instance.currentlureID);
+            fishingRod_.OnFishHitAtPosition(transform.position, lureID);
         }
+    }
+
+    public void SetRod(FishingRod fishingRod)
+    {
+        fishingRod_ = fishingRod;
     }
 }

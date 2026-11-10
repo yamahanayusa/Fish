@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4297776793828629409}
   - component: {fileID: 3762939463296660585}
   - component: {fileID: 7619452556286126344}
-  - component: {fileID: 3049234944530958960}
+  - component: {fileID: 937865195957759609}
   m_Layer: 0
   m_Name: LureDummy
   m_TagString: Untagged
@@ -141,7 +141,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &3049234944530958960
+--- !u!114 &937865195957759609
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -150,7 +150,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 83267991712719038}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6923a0ed9dab7249a1824d202600571, type: 3}
+  m_Script: {fileID: 11500000, guid: b57f1d7df3f817f46a010d0f315e2de1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Lure
-  detectionRadius: 3
+  lureID: BossLure
+  biteChancePercent: 1.5
+  retrieveDistance: 1

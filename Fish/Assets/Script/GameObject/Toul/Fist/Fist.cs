@@ -23,11 +23,11 @@ public class Fist : MonoBehaviour
             if (moveState)
             {
                 Vector3 moveDirection = targetPosition_.transform.position - fistPosition_.transform.position;
-                Vector3 moveVol = moveDirection.normalized * 0.1f;
+                Vector3 moveVol = moveDirection.normalized * 0.07f;
                 transform.position += moveVol;
 
                 Vector3 length = transform.position - targetPosition_.transform.position;
-                if(length.magnitude < 0.2f)
+                if(length.magnitude < 0.1f)
                 {
                     moveState = false;
                 }
@@ -35,11 +35,11 @@ public class Fist : MonoBehaviour
             else
             {
                 Vector3 moveDirection = fistPosition_.transform.position - targetPosition_.transform.position;
-                Vector3 moveVol = moveDirection.normalized * 0.1f;
+                Vector3 moveVol = moveDirection.normalized * 0.07f;
                 transform.position += moveVol;
 
                 Vector3 length = transform.position - fistPosition_.transform.position;
-                if (length.magnitude < 0.2f)
+                if (length.magnitude < 0.1f)
                 {
                     moveState = true;
                     transform.position = fistPosition_.transform.position;
@@ -58,14 +58,14 @@ public class Fist : MonoBehaviour
     {
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 10.0f))
+        if (Physics.Raycast(ray, out hit, 3.0f))
         {
             targetPosition_.transform.position = hit.point;
         }
         else
         {
             Vector3 targetPosition = Camera.main.transform.position;
-            targetPosition += Camera.main.transform.forward * 10.0f;
+            targetPosition += Camera.main.transform.forward * 3.0f;
 
             targetPosition_.transform.position = targetPosition;
         }
