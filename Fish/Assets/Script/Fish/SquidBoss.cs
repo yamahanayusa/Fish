@@ -13,6 +13,9 @@ public class SquidBoss : MonoBehaviour
     [SerializeField] private float attackInterval = 3f; // 攻撃の頻度
     [SerializeField] private float dashForce = 15f;     // 突進の力
 
+    [Header("索敵範囲")]
+    [SerializeField] private float aggroiDistance = 30f; // プレイヤーを検知する範囲
+
     [Header("イカ墨設定")]
     [SerializeField] private GameObject inkPrefab;      // 発射する墨のプレハブ
     [SerializeField] private Transform inkSpawnPoint;   // 墨を発射する位置（口元など）
@@ -28,10 +31,16 @@ public class SquidBoss : MonoBehaviour
         rb = GetComponent<Rigidbody>();
 
         // プレイヤーを取得
-        GameObject playerObj = GameObject.Find("PlayerCube");
+        GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
             player = playerObj.transform;
+            Debug.Log("ボス：プレイヤーを見つけました");
+        }
+
+        else
+        {
+            Debug.LogWarning("ボス：Playerタグのついたオブジェクトが見つかりません！");
         }
     }
 
@@ -41,6 +50,18 @@ public class SquidBoss : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K))
         {
             TakeDamage(20f);
+        }
+
+        if(!isBattling && player != null)
+        {
+            // プレイヤーとの距離を計算
+            float distance = Vector3.Distance(transform.position, player.position);
+
+            // プレイヤーが一定距離以内に入ったら戦闘開始
+            if (distance <= aggroiDistance)
+            {
+                StartBossBattle();
+            }
         }
     }
 
