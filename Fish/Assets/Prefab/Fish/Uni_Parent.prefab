@@ -76,8 +76,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackingFish
   fishData: {fileID: 11400000, guid: 14f07b189290bb4498017869d5aec707, type: 2}
+  fishItemPrefab: {fileID: 8347547083422208138, guid: c8cc91cacc3351f45b2a3f56bb4a67be, type: 3}
+  waterLevelY: -1
   attackJumpForce: 7
   attackAngleOffset: 20.7
+  isDead: 0
 --- !u!114 &5425368675009257260
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -3,7 +3,8 @@ public enum ToulType
 {
     Fist,
     Gun,
-    Fish
+    Fish,
+    Rod
 }
 
 public class ToulBase : MonoBehaviour

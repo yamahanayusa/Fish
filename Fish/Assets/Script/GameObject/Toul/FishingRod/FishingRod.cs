@@ -43,6 +43,7 @@ public class FishingRod : ToulBase
     private void Awake()
     {
         rod_ = transform.Find("Rod");
+        toulType_ = ToulType.Rod;
 
     }
 

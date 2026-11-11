@@ -153,6 +153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b57f1d7df3f817f46a010d0f315e2de1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Lure
-  lureID: BossLure
+  lureID: LureA
   biteChancePercent: 1.5
   retrieveDistance: 1
