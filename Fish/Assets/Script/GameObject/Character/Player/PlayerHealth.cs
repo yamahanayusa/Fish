@@ -76,10 +76,10 @@ public class PlayerHealth : MonoBehaviour
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
         if (gameOverVolume != null) gameOverVolume.SetActive(true);
 
-        if (FishingManager.Instance != null)
-        {
-            FishingManager.Instance.enabled = false;
-        }
+        //if (FishingManager.Instance != null)
+        //{
+        //    FishingManager.Instance.enabled = false;
+        //}
 
         // プレイヤーの移動を強制停止
         Player playerScript = GetComponent<Player>();
@@ -126,11 +126,11 @@ public class PlayerHealth : MonoBehaviour
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (gameOverVolume != null) gameOverVolume.SetActive(false);
 
-        if (FishingManager.Instance != null)
-        {
-            FishingManager.Instance.enabled = true;
-            FishingManager.Instance.ResetFishing();
-        }
+        //if (FishingManager.Instance != null)
+        //{
+        //    FishingManager.Instance.enabled = true;
+        //    FishingManager.Instance.ResetFishing();
+        //}
 
         // 復活時：各スクリプトを有効化
         Player playerScript = GetComponent<Player>();

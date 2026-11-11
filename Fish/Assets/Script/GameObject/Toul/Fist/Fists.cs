@@ -6,6 +6,7 @@ public class Fists : ToulBase
 {
     [SerializeField] private GameObject rHandObject_;
     [SerializeField] private GameObject lHandObject_;
+    [SerializeField] private int damege_ = 0;
 
     private Fist[] fists_ = new Fist[2];
     private bool nextFists_;
@@ -14,7 +15,9 @@ public class Fists : ToulBase
     {
         toulType_ = ToulType.Fist;
         fists_[0] = rHand_.GetComponent<Fist>();
+        fists_[0].SetDamege(damege_);
         fists_[1] = lHand_.GetComponent<Fist>();
+        fists_[1].SetDamege(damege_);
     }
 
     // Update is called once per frame

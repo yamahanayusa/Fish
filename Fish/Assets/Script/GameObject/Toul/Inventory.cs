@@ -34,39 +34,20 @@ public class Inventory : MonoBehaviour
     {
         ChangeTest();
 
-        if (selectToul_.GetToulType() == ToulType.Fist)
-        {
-            if (Input.GetKeyDown(KeyCode.F))
-            {
-                Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
-
-                Debug.DrawRay(ray.origin, ray.direction * 300, Color.green, 10, true);
-                RaycastHit hit;
-                if (Physics.Raycast(ray, out hit, 5.0f))
-                {
-                    if (hit.collider.gameObject.tag.Contains("Item"))
-                    {
-                        AddToul(hit.collider.gameObject);
-                        Debug.Log("tukameta");
-                    }
-                    else
-                    {
-                        Debug.Log("koretigau");
-                    }
-                }
-                else
-                {
-                    Debug.Log("todokanai");
-                }
-            }
-        }
-
         if (Input.GetKeyDown(KeyCode.Q))
         {
             ReleaseToul(selectToul_.gameObject);
         }
 
         selectToul_.Use();
+    }
+
+    public void GetItem(GameObject item)
+    {
+        if (selectToul_.GetToulType() == ToulType.Fist)
+        {
+            AddToul(item);
+        }
     }
 
     bool NewToul(GameObject obj)
@@ -154,11 +135,10 @@ public class Inventory : MonoBehaviour
         selectToul_.gameObject.SetActive(true);
         selectNum_ = num;
 
-        Debug.Log("持ち物を");
-        Debug.Log(num);
-        Debug.Log("に変更");
+        //Debug.Log("持ち物を");
+        //Debug.Log(num);
+        //Debug.Log("に変更");
     }
-
 
     void SetHand(ToulBase obj)
     {
