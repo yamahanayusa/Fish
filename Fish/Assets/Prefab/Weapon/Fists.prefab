@@ -54,6 +54,7 @@ MonoBehaviour:
   lHand_: {fileID: 1090556466874689344}
   rHandObject_: {fileID: 7067242744133346310}
   lHandObject_: {fileID: 4204717296809997616}
+  damege_: 0
 --- !u!1 &620161546685575863
 GameObject:
   m_ObjectHideFlags: 0

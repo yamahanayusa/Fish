@@ -5,9 +5,10 @@ public class Fist : MonoBehaviour
 {
     [SerializeField] private GameObject fistPosition_;
     [SerializeField] private GameObject targetPosition_;
-    private bool isUse_ = false;
+    private bool isUse_ = true;
     private bool moveState = false;
-
+    private SphereCollider sphereCollider_;
+    private int damege_ = 0;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -30,6 +31,11 @@ public class Fist : MonoBehaviour
                 if(length.magnitude < 0.1f)
                 {
                     moveState = false;
+
+                    if(sphereCollider_)
+                    {
+                        Destroy(sphereCollider_);
+                    }
                 }
             }
             else
@@ -46,6 +52,21 @@ public class Fist : MonoBehaviour
                     isUse_ = false;
                 }
             }
+        }
+    }
+
+    void OnTriggerEnter(Collider collision)
+    {
+        if(collision.gameObject.tag.Contains("Fish_"))
+        {
+            Health hp = collision.gameObject.GetComponent<Health>();
+
+            if (hp)
+            {
+                hp.AddDamege(damege_);
+            }
+            moveState = false;
+            Destroy(sphereCollider_);
         }
     }
 
@@ -69,7 +90,16 @@ public class Fist : MonoBehaviour
 
             targetPosition_.transform.position = targetPosition;
         }
+
+        sphereCollider_ = gameObject.AddComponent<SphereCollider>();
+
+        sphereCollider_.isTrigger = true;
+        sphereCollider_.radius = 0.1f;
         isUse_ = true;
     }
 
+    public void SetDamege(int damege)
+    {
+        damege_ = damege;
+    }
 }

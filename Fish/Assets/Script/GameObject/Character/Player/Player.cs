@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     Rigidbody rb_;
     [SerializeField] private GameObject eye_;
+    [SerializeField] private GameObject inventory_;
     [SerializeField] private int hp_;
     [SerializeField] private float moveSpeed_;
     [SerializeField] private float jumpPower_;
@@ -21,7 +22,20 @@ public class Player : MonoBehaviour
     void Update()
     {
         Move();
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+            RaycastHit hit;
 
+            if (Physics.Raycast(ray, out hit, 5.0f))
+            {
+                if (hit.collider.gameObject.tag.Contains("Item"))
+                {
+                    Inventory inventory = inventory_.GetComponent<Inventory>();
+                    inventory.GetItem(hit.collider.gameObject);
+                }
+            }
+        }
     }
 
 
