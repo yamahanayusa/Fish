@@ -39,20 +39,31 @@ public class Inventory : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.F))
             {
                 Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+
+                Debug.DrawRay(ray.origin, ray.direction * 300, Color.green, 10, true);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit, 5.0f))
                 {
                     if (hit.collider.gameObject.tag.Contains("Item"))
                     {
                         AddToul(hit.collider.gameObject);
+                        Debug.Log("tukameta");
+                    }
+                    else
+                    {
+                        Debug.Log("koretigau");
                     }
                 }
+                else
+                {
+                    Debug.Log("todokanai");
+                }
             }
+        }
 
-            if (Input.GetKeyDown(KeyCode.Q))
-            {
-                ReleaseToul(selectToul_.gameObject);
-            }
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            ReleaseToul(selectToul_.gameObject);
         }
 
         selectToul_.Use();
@@ -155,6 +166,8 @@ public class Inventory : MonoBehaviour
         if(obj.GetToulType() == ToulType.Fish)
         {
             obj.transform.parent = hand.GetRHandObject().transform;
+            obj.transform.localPosition = Vector3.zero;
+            obj.transform.localRotation = Quaternion.identity;
         }
         else
         {
@@ -171,7 +184,9 @@ public class Inventory : MonoBehaviour
 
         if (obj.GetToulType() == ToulType.Fish)
         {
-            obj.transform.parent = transform;
+            GameObject itemList = GameObject.Find("ItemList");
+
+            obj.transform.parent = itemList.transform;
         }
         hand.GetRHandObject().transform.parent = hand.GetRHand().transform;
         hand.GetRHandObject().transform.localPosition = Vector3.zero;

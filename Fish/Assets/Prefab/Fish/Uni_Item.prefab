@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 247004077065501137}
   m_Layer: 0
   m_Name: Uni_Item
-  m_TagString: Untagged
+  m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,10 +95,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6b1ac550250c464abb576bd7705787f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FishItem
+  rHand_: {fileID: 0}
+  lHand_: {fileID: 0}
   fishData: {fileID: 11400000, guid: 14f07b189290bb4498017869d5aec707, type: 2}
-  pickupDistance: 3
-  holdOffset: {x: 0, y: 0.5, z: 1.5}
-  isHeld: 0
 --- !u!1001 &8648602806961219756
 PrefabInstance:
   m_ObjectHideFlags: 0
