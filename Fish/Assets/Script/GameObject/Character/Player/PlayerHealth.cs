@@ -9,6 +9,10 @@ public class PlayerHealth : MonoBehaviour
     private float currentHealth;
     private bool isDead = false;
 
+    [Header("被弾設定")]
+    [SerializeField] private float invincibilityTime = 1.0f; // 無敵時間（秒）
+    private bool isInvincible = false; // 無敵状態かどうかのフラグ
+
     [Header("UI設定")]
     [SerializeField] private Image hpRingImage;
     [SerializeField] private GameObject gameOverPanel;
@@ -49,15 +53,20 @@ public class PlayerHealth : MonoBehaviour
 
     public void TakeDamage(float damage)
     {
-        if (isDead) return;
+        // すでに死んでいるか、無敵時間中ならここで処理をストップ
+        if (isDead || isInvincible) return;
 
         currentHealth -= damage;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
-        UpdateHPUI();
+        UpdateHPUI(); // HPバー更新処理
 
         if (currentHealth <= 0)
         {
             Die();
+        }
+        else
+        {
+            // 死ななかった場合は無敵時間を開始する
+            StartCoroutine(InvincibilityRoutine());
         }
     }
 
@@ -141,5 +150,15 @@ public class PlayerHealth : MonoBehaviour
 
         Inventory inventoryScript = FindAnyObjectByType<Inventory>();
         if (inventoryScript != null) inventoryScript.enabled = true;
+    }
+
+    private System.Collections.IEnumerator InvincibilityRoutine()
+    {
+        isInvincible = true;
+
+        // 設定した時間（1秒）だけ待機
+        yield return new WaitForSeconds(invincibilityTime);
+
+        isInvincible = false;
     }
 }
