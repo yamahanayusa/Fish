@@ -16,30 +16,46 @@ public class AudioOptionController : MonoBehaviour
 
     private void Start()
     {
-        // 起動時にスライダーの初期位置に合わせてテキストを「1.00」などに更新する
-        if (masterSlider != null) OnMasterVolumeChanged(masterSlider.value);
-        if (musicSlider != null) OnMusicVolumeChanged(musicSlider.value);
-        if (sfxSlider != null) OnSFXVolumeChanged(sfxSlider.value);
+        // 1. 保存されている設定値を読み込む（まだ保存されていない初回起動時は 1.0f にする）
+        float savedMaster = PlayerPrefs.GetFloat("MasterVolume", 1.0f);
+        float savedMusic = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
+        float savedSFX = PlayerPrefs.GetFloat("SFXVolume", 1.0f);
+
+        // 2. 読み込んだ値をスライダーに反映する
+        if (masterSlider != null) masterSlider.value = savedMaster;
+        if (musicSlider != null) musicSlider.value = savedMusic;
+        if (sfxSlider != null) sfxSlider.value = savedSFX;
+
+        // 3. テキストの表示も更新する
+        if (masterValueText != null) masterValueText.text = savedMaster.ToString("F2");
+        if (musicValueText != null) musicValueText.text = savedMusic.ToString("F2");
+        if (sfxValueText != null) sfxValueText.text = savedSFX.ToString("F2");
     }
 
-    // マスター音量スライダーが動いたときに呼ばれる関数
     public void OnMasterVolumeChanged(float value)
     {
         if (masterValueText != null) masterValueText.text = value.ToString("F2");
-        Debug.Log($"【オーディオ設定】マスター音量を変更: {value:F2}");
+
+        // ★ スライダーが動くたびに値をセーブする
+        PlayerPrefs.SetFloat("MasterVolume", value);
+        PlayerPrefs.Save();
     }
 
-    // ミュージック音量スライダーが動いたときに呼ばれる関数
     public void OnMusicVolumeChanged(float value)
     {
         if (musicValueText != null) musicValueText.text = value.ToString("F2");
-        Debug.Log($"【オーディオ設定】ミュージック音量を変更: {value:F2}");
+
+        // ★ スライダーが動くたびに値をセーブする
+        PlayerPrefs.SetFloat("MusicVolume", value);
+        PlayerPrefs.Save();
     }
 
-    // 効果音音量スライダーが動いたときに呼ばれる関数
     public void OnSFXVolumeChanged(float value)
     {
         if (sfxValueText != null) sfxValueText.text = value.ToString("F2");
-        Debug.Log($"【オーディオ設定】効果音音量を変更: {value:F2}");
+
+        // ★ スライダーが動くたびに値をセーブする
+        PlayerPrefs.SetFloat("SFXVolume", value);
+        PlayerPrefs.Save();
     }
 }
