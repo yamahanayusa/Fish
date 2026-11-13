@@ -6,11 +6,14 @@ public class Inventory : MonoBehaviour
 {
     [SerializeField] private GameObject testObject_;
     [SerializeField] private GameObject handBaseObject_;
+    [SerializeField] private float throwPower_;
     private GameObject handObject_;
     private GameObject[] toulObjes_ = new GameObject[3];
     private ToulBase[] touls_ = new ToulBase[3];
     private ToulBase selectToul_;
     private int selectNum_ = 0;
+    private float throwForce_ = 0;
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -61,7 +64,14 @@ public class Inventory : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyDown(KeyCode.Q))
+
+        if (Input.GetKey(KeyCode.Q))
+        {
+            throwForce_ += Time.deltaTime;
+
+            throwForce_ = Math.Min(1.0f, throwForce_);
+        } 
+        else if (Input.GetKeyUp(KeyCode.Q))
         {
             ReleaseToul(selectToul_.gameObject);
         }
@@ -138,6 +148,10 @@ public class Inventory : MonoBehaviour
         {
             col.enabled = true;
         }
+
+        Vector3 force = Camera.main.transform.forward * throwForce_ * throwPower_;
+
+        rb.AddForce(force);
 
         ReleaseHand(obj.GetComponent<ToulBase>());
     }
