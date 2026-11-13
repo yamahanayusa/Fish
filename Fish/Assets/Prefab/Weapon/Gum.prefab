@@ -204,7 +204,7 @@ Transform:
   m_GameObject: {fileID: 5353288832793923455}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.75, y: 3.82, z: 4.75}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -226,12 +226,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Gun
   rHand_: {fileID: 451407105939424979}
   lHand_: {fileID: 8494050799206620531}
+  ammoObject_: {fileID: 7440393233510843588, guid: 36e07580c88c91541ad57d6b6bc34716, type: 3}
   firePos_: {fileID: 996382218378617849}
-  recoilX_: 0
-  recoilY_: 0
-  rate_: 0
-  maxAmmo_: 0
-  fireMode_: 0
+  recoilX_: 1
+  recoilY_: 1
+  rate_: 0.1
+  maxAmmo_: 30
+  fireMode_: 1
 --- !u!1 &5915459968701062814
 GameObject:
   m_ObjectHideFlags: 0
@@ -373,7 +374,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.90666693, z: 0.53999937}
-  m_LocalScale: {x: 0.46666664, y: -0.39999998, z: 2.6666667}
+  m_LocalScale: {x: 0.46666664, y: 0.4, z: 2.6666667}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5120219106741849586}

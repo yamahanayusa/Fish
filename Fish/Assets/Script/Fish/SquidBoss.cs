@@ -1,25 +1,32 @@
 using UnityEngine;
 using System.Collections;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using TMPro; 
 
 [RequireComponent(typeof(Rigidbody))]
 public class SquidBoss : MonoBehaviour
 {
     [Header("ステータス")]
+    [SerializeField] private string bossName = "巨大イカ"; // インスペクターで名前を自由に変更可能
     [SerializeField] private float maxHealth = 100f;
     private float currentHealth;
 
     [Header("攻撃設定")]
-    [SerializeField] private float attackInterval = 3f; // 攻撃の頻度
-    [SerializeField] private float dashForce = 15f;     // 突進の力
+    [SerializeField] private float attackInterval = 3f;
+    [SerializeField] private float dashForce = 15f;
 
     [Header("索敵範囲")]
-    [SerializeField] private float aggroiDistance = 30f; // プレイヤーを検知する範囲
+    [SerializeField] private float aggroiDistance = 30f;
 
     [Header("イカ墨設定")]
-    [SerializeField] private GameObject inkPrefab;      // 発射する墨のプレハブ
-    [SerializeField] private Transform inkSpawnPoint;   // 墨を発射する位置（口元など）
+    [SerializeField] private GameObject inkPrefab;
+    [SerializeField] private Transform inkSpawnPoint;
     [SerializeField] private float inkSpeed = 20f;
+
+    private GameObject bossUIPanel;
+    private Slider bossHpSlider;
+    private TextMeshProUGUI bossNameText; // 名前を書き換えるためのテキスト部品
 
     private Rigidbody rb;
     private Transform player;
@@ -30,34 +37,43 @@ public class SquidBoss : MonoBehaviour
         currentHealth = maxHealth;
         rb = GetComponent<Rigidbody>();
 
-        // プレイヤーを取得
+        // プレイヤーの取得
         GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
         if (playerObj != null)
         {
             player = playerObj.transform;
-            Debug.Log("ボス：プレイヤーを見つけました");
         }
 
-        else
+        // Canvasを探し、その中からUIを自動取得する
+        GameObject canvasObj = GameObject.Find("Canvas");
+        if (canvasObj != null)
         {
-            Debug.LogWarning("ボス：Playerタグのついたオブジェクトが見つかりません！");
+            Transform panelTransform = canvasObj.transform.Find("BossUIPanel");
+            if (panelTransform != null)
+            {
+                bossUIPanel = panelTransform.gameObject;
+                bossHpSlider = bossUIPanel.GetComponentInChildren<Slider>(true);
+
+                // パネルの中からTextMeshProコンポーネントを自動取得
+                bossNameText = bossUIPanel.GetComponentInChildren<TextMeshProUGUI>(true);
+            }
+            else
+            {
+                Debug.LogWarning("Canvasの中に 'BossUIPanel' が見つかりません。");
+            }
         }
     }
 
     private void Update()
     {
-        // プレイヤーの攻撃未実装のため、仮で「Kキー」を押すとダメージを受ける
         if (Input.GetKeyDown(KeyCode.K))
         {
             TakeDamage(20f);
         }
 
-        if(!isBattling && player != null)
+        if (!isBattling && player != null)
         {
-            // プレイヤーとの距離を計算
             float distance = Vector3.Distance(transform.position, player.position);
-
-            // プレイヤーが一定距離以内に入ったら戦闘開始
             if (distance <= aggroiDistance)
             {
                 StartBossBattle();
@@ -67,25 +83,37 @@ public class SquidBoss : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        // プレイヤーにぶつかったらダメージを与える
         if (collision.gameObject.CompareTag("Player"))
         {
             PlayerHealth playerHealth = collision.gameObject.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(35f); // 1回の突進ダメージ量
-                Debug.Log("【ボス攻撃】突進がプレイヤーにヒット！");
+                playerHealth.TakeDamage(35f);
             }
         }
     }
 
-    // 釣り上げられた（リリースされた）時に外部（FishingManager等）から呼ぶ
     public void StartBossBattle()
     {
         if (!isBattling)
         {
             isBattling = true;
-            Debug.Log("【ボス戦開始】イカが戦闘態勢に入った！");
+            Debug.Log("【ボス戦開始】" + bossName + " が戦闘態勢に入った！"); // ログも名前に対応
+
+            if (bossUIPanel != null) bossUIPanel.SetActive(true);
+
+            // 戦闘開始時にUIのテキストをこのボスの名前に書き換える
+            if (bossNameText != null)
+            {
+                bossNameText.text = bossName;
+            }
+
+            if (bossHpSlider != null)
+            {
+                bossHpSlider.maxValue = maxHealth;
+                bossHpSlider.value = currentHealth;
+            }
+
             StartCoroutine(BossAttackRoutine());
         }
     }
@@ -96,7 +124,6 @@ public class SquidBoss : MonoBehaviour
         {
             yield return new WaitForSeconds(attackInterval);
 
-            // 0か1をランダムに出して攻撃パターンを分岐
             int attackType = Random.Range(0, 2);
             if (attackType == 0)
             {
@@ -111,10 +138,8 @@ public class SquidBoss : MonoBehaviour
 
     private void DashAttack()
     {
-        Debug.Log("【ボス攻撃】突進！");
         if (player != null)
         {
-            // プレイヤーの方向を向いて突っ込む
             Vector3 direction = (player.position - transform.position).normalized;
             transform.rotation = Quaternion.LookRotation(direction);
             rb.AddForce(direction * dashForce, ForceMode.Impulse);
@@ -123,16 +148,13 @@ public class SquidBoss : MonoBehaviour
 
     private void InkAttack()
     {
-        Debug.Log("【ボス攻撃】イカ墨！");
         if (inkPrefab != null && inkSpawnPoint != null && player != null)
         {
-            // 修正：プレイヤーの足元ではなく、高さ(Y)を少し上（胸のあたり）にずらして狙う
             Vector3 targetPos = player.position + Vector3.up * 0.5f;
             Vector3 direction = (targetPos - inkSpawnPoint.position).normalized;
 
             transform.rotation = Quaternion.LookRotation(direction);
 
-            // イカ墨の弾を生成して飛ばす
             GameObject ink = Instantiate(inkPrefab, inkSpawnPoint.position, Quaternion.identity);
             Rigidbody inkRb = ink.GetComponent<Rigidbody>();
             if (inkRb != null)
@@ -145,7 +167,11 @@ public class SquidBoss : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        Debug.Log($"【ボス】ダメージを受けた！ 残りHP: {currentHealth}");
+
+        if (bossHpSlider != null)
+        {
+            bossHpSlider.value = currentHealth;
+        }
 
         if (currentHealth <= 0)
         {
@@ -156,12 +182,13 @@ public class SquidBoss : MonoBehaviour
     private void Die()
     {
         isBattling = false;
-        Debug.Log("【ボス討伐】イカを倒した！");
 
-        // ボス自身を消去
+        if (bossUIPanel != null)
+        {
+            bossUIPanel.SetActive(false);
+        }
+
         Destroy(gameObject);
-
-        // Clearシーンへ移動する
         SceneManager.LoadScene("Clear");
     }
 }

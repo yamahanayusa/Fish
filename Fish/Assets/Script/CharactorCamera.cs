@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEngine.Rendering.DebugUI;
 
 public class CharactorCamera : MonoBehaviour
 {
@@ -27,6 +28,8 @@ public class CharactorCamera : MonoBehaviour
         xRotation_ += Input.GetAxis("Mouse X") * 0.8f;
         yRotation_ += Input.GetAxis("Mouse Y") * 0.8f;
 
+        yRotation_ = Mathf.Clamp(yRotation_, -89, 89);
+
         transform.rotation = Quaternion.Euler(-yRotation_, xRotation_, 0);
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -34,5 +37,16 @@ public class CharactorCamera : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+    }
+
+    public void AddCameraAngle(float x, float y)
+    {
+        xRotation_ += x;
+        yRotation_ += y;
     }
 }
