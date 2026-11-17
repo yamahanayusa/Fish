@@ -7,7 +7,6 @@ public class Player : MonoBehaviour
     Rigidbody rb_;
     [SerializeField] private GameObject eye_;
     [SerializeField] private GameObject inventory_;
-    [SerializeField] private int hp_;
     [SerializeField] private float moveSpeed_;
     [SerializeField] private float jumpPower_;
     private bool isGround= false;

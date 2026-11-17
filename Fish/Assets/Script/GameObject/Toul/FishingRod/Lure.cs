@@ -4,7 +4,7 @@ using UnityEngine;
 public class Lure : MonoBehaviour
 {
     [Header("ルアー設定")]
-    [SerializeField] private string lureID = "LureA";
+    [SerializeField] private string lureID = "BossLure";
 
     [Header("ヒット確率設定")]
     [Tooltip("巻き取り中にフレームごとにヒットする確率（%）")]
