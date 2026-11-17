@@ -355,6 +355,18 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8828390402371065232, guid: a2d0cfcd02bae8640951d42c2db37af5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 32374459}
+    - target: {fileID: 8828390402371065232, guid: a2d0cfcd02bae8640951d42c2db37af5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: OnClickAudioTab
+      objectReference: {fileID: 0}
+    - target: {fileID: 8828390402371065232, guid: a2d0cfcd02bae8640951d42c2db37af5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: SystemMenuManager, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 8856511597203016075, guid: a2d0cfcd02bae8640951d42c2db37af5, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -4244,7 +4256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.392}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.6745098}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

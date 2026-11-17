@@ -238,7 +238,7 @@ GameObject:
   - component: {fileID: 5487271305711848738}
   m_Layer: 0
   m_Name: Cuttlefish_Rigged_Unity
-  m_TagString: Untagged
+  m_TagString: Fish_Squid
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
