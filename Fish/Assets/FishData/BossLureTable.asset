@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FishingLureTable
   lureID: BossLure
   fishPrefabs:
-  - {fileID: 7571148381714598859, guid: 7680ee9ffd1c52d40a94e27a4a0051e3, type: 3}
+  - {fileID: 8417595138899458069, guid: a29365d33292f384c8a30b97893d485c, type: 3}
