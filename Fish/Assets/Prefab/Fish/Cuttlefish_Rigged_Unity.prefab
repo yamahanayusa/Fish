@@ -397,7 +397,7 @@ GameObject:
   - component: {fileID: 6753964951319953785}
   - component: {fileID: 8342263575838060643}
   - component: {fileID: 7965526277851670995}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: DashAttackHitbox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -413,7 +413,7 @@ Transform:
   m_GameObject: {fileID: 6214457515516328223}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0.465}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -438,7 +438,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.3, y: 0.1, z: 1.1}
+  m_Size: {x: 0.2, y: 0.1, z: 0.1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7965526277851670995
 MonoBehaviour:
@@ -484,7 +484,7 @@ Transform:
   m_GameObject: {fileID: 8417595138899458069}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 7.4240503, y: 2.7027066, z: 9.996078}
+  m_LocalPosition: {x: 5.69, y: 3.62, z: 10.25474}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children:

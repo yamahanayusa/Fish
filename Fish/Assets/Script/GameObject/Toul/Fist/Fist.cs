@@ -77,9 +77,10 @@ public class Fist : MonoBehaviour
 
     public void Use()
     {
+        int layerMask = ~(1 << LayerMask.NameToLayer("Attack"));
         Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 3.0f))
+        if (Physics.Raycast(ray, out hit, 3.0f, layerMask))
         {
             targetPosition_.transform.position = hit.point;
         }

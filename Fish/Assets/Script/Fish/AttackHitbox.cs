@@ -7,6 +7,7 @@ public class AttackHitbox : MonoBehaviour
     [SerializeField] private int defaultDamage_ = 10;
     [SerializeField] private string targetTag_ = "Player";
 
+    private Collider hitboxCollider_;
     private int currentDamage_ = 0;
     private bool isAttacking_ = false;
     private bool hasHitInAttack_ = false;
@@ -14,12 +15,12 @@ public class AttackHitbox : MonoBehaviour
     private void Awake()
     {
         currentDamage_ = defaultDamage_;
+        hitboxCollider_ = GetComponent<Collider>();
 
-        // アタッチされたColliderを確実にTrigger設定にする
-        Collider col = GetComponent<Collider>();
-        if (col != null && !col.isTrigger)
+        if (hitboxCollider_ != null)
         {
-            col.isTrigger = true;
+            hitboxCollider_.isTrigger = true;
+            hitboxCollider_.enabled = false; // 初期状態は判定をオフにしておく
         }
     }
 
@@ -38,7 +39,12 @@ public class AttackHitbox : MonoBehaviour
     {
         currentDamage_ = damage;
         isAttacking_ = true;
-        hasHitInAttack_ = false; // 今回の攻撃のヒット済みフラグをリセット
+        hasHitInAttack_ = false;
+
+        if (hitboxCollider_ != null)
+        {
+            hitboxCollider_.enabled = true; // 攻撃時のみコライダーを出す
+        }
     }
 
     /// <summary>
@@ -47,6 +53,16 @@ public class AttackHitbox : MonoBehaviour
     public void EndAttack()
     {
         isAttacking_ = false;
+
+        if (hitboxCollider_ != null)
+        {
+            hitboxCollider_.enabled = false; // 攻撃終了でコライダーを消す
+        }
+    }
+
+    private void OnDisable()
+    {
+        EndAttack();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -61,17 +77,15 @@ public class AttackHitbox : MonoBehaviour
 
     private void TryHit(Collider other)
     {
-        // 攻撃中でない、または今回の攻撃ですでにヒット済みなら処理しない
         if (!isAttacking_ || hasHitInAttack_) return;
 
         if (other.CompareTag(targetTag_))
         {
-            // コライダーが子オブジェクトにある場合も考慮して親方向も検索
             Health targetHealth = other.GetComponentInParent<Health>();
             if (targetHealth != null)
             {
                 targetHealth.AddDamege(currentDamage_);
-                hasHitInAttack_ = true; // 1回ヒットしたらこの攻撃中は再ヒットさせない
+                hasHitInAttack_ = true;
             }
         }
     }

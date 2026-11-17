@@ -205,4 +205,11 @@ public class SquidBoss : MonoBehaviour
         Destroy(gameObject);
         SceneManager.LoadScene("Clear");
     }
+    private void OnDestroy()
+    {
+        if (bossUIPanel != null)
+        {
+            bossUIPanel.SetActive(false);
+        }
+    }
 }

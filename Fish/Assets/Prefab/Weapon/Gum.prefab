@@ -228,10 +228,11 @@ MonoBehaviour:
   lHand_: {fileID: 8494050799206620531}
   ammoObject_: {fileID: 7440393233510843588, guid: 36e07580c88c91541ad57d6b6bc34716, type: 3}
   firePos_: {fileID: 996382218378617849}
-  recoilX_: 1
-  recoilY_: 1
+  recoilX_: 0
+  recoilY_: 0
   rate_: 0.1
   maxAmmo_: 30
+  power_: 5
   fireMode_: 1
 --- !u!1 &5915459968701062814
 GameObject:
