@@ -15,7 +15,11 @@ public class PlayerLifeHandler : MonoBehaviour
 
     private Health health;
     private bool isDead = false;
+    private bool isPaused = false;
     private float currentHoldTime = 0f;
+
+    // 外部（SystemMenuManagerなど）から死亡中か確認するためのプロパティ
+    public bool IsDead => isDead;
 
     private void Awake()
     {
@@ -42,7 +46,8 @@ public class PlayerLifeHandler : MonoBehaviour
 
     private void Update()
     {
-        if (!isDead) return;
+        // ポーズ中は復活の長押しカウントも進めない
+        if (!isDead || isPaused) return;
 
         // 左クリック長押しで復活
         if (Input.GetMouseButton(0))
@@ -86,13 +91,8 @@ public class PlayerLifeHandler : MonoBehaviour
         if (gameOverPanel != null) gameOverPanel.SetActive(true);
         if (gameOverVolume != null) gameOverVolume.SetActive(true);
 
-        //if (FishingManager.Instance != null)
-        //{
-        //    FishingManager.Instance.enabled = false;
-        //}
-
         // プレイヤー移動・カメラ・インベントリを強制停止
-        SetPlayerControlsActive(false);
+        UpdateControlsState();
 
         // 慣性で滑らないように速度を0にする
         Rigidbody rb = GetComponent<Rigidbody>();
@@ -121,25 +121,31 @@ public class PlayerLifeHandler : MonoBehaviour
         if (gameOverPanel != null) gameOverPanel.SetActive(false);
         if (gameOverVolume != null) gameOverVolume.SetActive(false);
 
-        //if (FishingManager.Instance != null)
-        //{
-        //    FishingManager.Instance.enabled = true;
-        //    FishingManager.Instance.ResetFishing();
-        //}
-
         // 復活時：各スクリプトを再有効化
-        SetPlayerControlsActive(true);
+        UpdateControlsState();
     }
 
-    private void SetPlayerControlsActive(bool isActive)
+    /// <summary>
+    /// ポーズ状態の切り替え（SystemMenuManagerから呼び出す）
+    /// </summary>
+    public void SetPaused(bool paused)
     {
+        isPaused = paused;
+        UpdateControlsState();
+    }
+
+    // 死亡中でもポーズ中でもない場合のみプレイヤー操作を有効化する
+    private void UpdateControlsState()
+    {
+        bool canControl = !isDead && !isPaused;
+
         Player playerScript = GetComponent<Player>();
-        if (playerScript != null) playerScript.enabled = isActive;
+        if (playerScript != null) playerScript.enabled = canControl;
 
         CharactorCamera camScript = GetComponentInChildren<CharactorCamera>();
-        if (camScript != null) camScript.enabled = isActive;
+        if (camScript != null) camScript.enabled = canControl;
 
         Inventory inventoryScript = FindAnyObjectByType<Inventory>();
-        if (inventoryScript != null) inventoryScript.enabled = isActive;
+        if (inventoryScript != null) inventoryScript.enabled = canControl;
     }
 }
