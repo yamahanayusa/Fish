@@ -42,6 +42,10 @@ public class SystemMenuManager : MonoBehaviour
         // canPauseがTrue（メインゲーム中）のみ、Escキーでポーズ切り替え
         if (canPause && Input.GetKeyDown(KeyCode.Escape))
         {
+            // プレイヤーが死亡中（ゲームオーバー画面表示中）はポーズを開かない
+            PlayerLifeHandler playerLife = FindAnyObjectByType<PlayerLifeHandler>();
+            if (playerLife != null && playerLife.IsDead) return;
+
             if (isPaused) ResumeGame();
             else PauseGame();
         }
@@ -99,6 +103,13 @@ public class SystemMenuManager : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
 
+        // プレイヤーの操作（移動・カメラ・インベントリ）を停止
+        PlayerLifeHandler playerLife = FindAnyObjectByType<PlayerLifeHandler>();
+        if (playerLife != null)
+        {
+            playerLife.SetPaused(true);
+        }
+
         if (pauseBackgroundPanel != null) pauseBackgroundPanel.SetActive(true);
 
         // オプションや終了確認が開いていたらリセットして、メインメニューを出す
@@ -114,6 +125,13 @@ public class SystemMenuManager : MonoBehaviour
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        // プレイヤーの操作を再開
+        PlayerLifeHandler playerLife = FindAnyObjectByType<PlayerLifeHandler>();
+        if (playerLife != null)
+        {
+            playerLife.SetPaused(false);
+        }
 
         if (pauseBackgroundPanel != null) pauseBackgroundPanel.SetActive(false);
         if (pauseMenuUI != null) pauseMenuUI.SetActive(false);
