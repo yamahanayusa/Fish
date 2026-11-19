@@ -164,6 +164,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 618951459aaa47343903ad4953192006, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameLoopManager
+  sceneChanger: {fileID: 0}
+  titleSceneName: Title
+  creditTextRect: {fileID: 0}
+  scrollSpeed: 80
+  endPosY: 1200
+  autoReturnOnEnd: 0
+  guideText: {fileID: 0}
+  blinkSpeed: 2
 --- !u!114 &32374459
 MonoBehaviour:
   m_ObjectHideFlags: 0
