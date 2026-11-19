@@ -1465,7 +1465,9 @@ MonoBehaviour:
   bgmList:
   - name: TestBGM
     clip: {fileID: 8300000, guid: b2f3351be045ea24ea0d48a53a674192, type: 3}
-  seList: []
+  seList:
+  - name: 
+    clip: {fileID: 0}
   playBgmOnStart: TestBGM
 --- !u!1 &1583224806
 GameObject:
