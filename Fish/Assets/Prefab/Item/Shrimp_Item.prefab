@@ -46,7 +46,7 @@ GameObject:
   - component: {fileID: 4656171819812635792}
   m_Layer: 0
   m_Name: Shrimp_Item
-  m_TagString: Item
+  m_TagString: Item_Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -145,7 +145,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SellableItem
   priceType: 1
   fixedPrice: 10
-  fishData: {fileID: 11400000, guid: 8529a0e5b717e6e41a1646f08bc9b2df, type: 2}
 --- !u!1001 &504841764299504498
 PrefabInstance:
   m_ObjectHideFlags: 0

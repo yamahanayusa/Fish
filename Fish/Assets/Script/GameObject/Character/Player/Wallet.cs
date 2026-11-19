@@ -2,22 +2,8 @@ using UnityEngine;
 
 public class Wallet : MonoBehaviour
 {
-    public static Wallet Instance;
-
     [Header("Š‹à")]
     public int currentGold = 0;
-
-    private void Awake()
-    {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(this);
-        }
-    }
 
     public void AddGold(int amount)
     {
@@ -35,5 +21,10 @@ public class Wallet : MonoBehaviour
         }
         Debug.Log("‚¨‹à‚ª‘«‚è‚Ü‚¹‚ñI");
         return false;
+    }
+
+    public int GetWallet()
+    {
+        return currentGold;
     }
 }
