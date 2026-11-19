@@ -6,6 +6,9 @@ TagManager:
   tags:
   - Item_Fish
   - Grill
+  - Fish_Squid
+  - Fish_Shrimp
+  - Fish_Uni
   layers:
   - Default
   - TransparentFX
