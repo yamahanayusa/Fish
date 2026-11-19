@@ -5,38 +5,56 @@ public class SellableItem : MonoBehaviour
     // 価格の決定方法を分けるためのモード
     public enum PriceType
     {
-        Fixed, // 武器など
-        FishData // 魚
+        enFixed, // 武器など
+        enFish // 魚
     }
 
     [Header("売却設定")]
-    [SerializeField] private PriceType priceType = PriceType.Fixed;
+    [SerializeField] private PriceType priceType;
 
     [Header("【固定価格の場合】")]
-    [SerializeField] private int fixedPrice = 10;
+    [SerializeField] private int fixedPrice;
 
-    [Header("【魚データの場合】")]
-    [SerializeField] private FishData fishData;
+
+    private float doneness = 1;
+
+    private bool burnt = false;
 
     /// <summary>
     /// アイテムに応じた売値を返す
     /// </summary>
     public int GetSellPrice()
     {
-        switch (priceType)
+        return fixedPrice;
+    }
+
+    public float GetDoneness()
+    {
+        return doneness;
+    }
+
+    public PriceType GetPriceType()
+    {
+        return priceType;
+    }
+
+    private void OnCollisionStay(Collision collision)
+
+    {
+        if (collision.gameObject.tag.Contains("Grill"))
         {
-            case PriceType.Fixed:
-                return fixedPrice;
-
-            case PriceType.FishData:
-                if (fishData != null)
+            if (burnt)
+            {
+                doneness -= 0.01f;
+            }
+            else
+            {
+                doneness += 0.01f;
+                if (doneness > 1.5f)
                 {
-                    return fishData.sellPrice;
+                    burnt = true;
                 }
-                return fixedPrice; // データがない場合の保険
-
-            default:
-                return 10;
+            }
         }
     }
 
@@ -45,31 +63,9 @@ public class SellableItem : MonoBehaviour
     /// </summary>
     public void InitializeFish(FishData data)
     {
-        priceType = PriceType.FishData;
-        fishData = data;
+        Debug.Log(data.sellPrice);
+        priceType = PriceType.enFish;
+        fixedPrice = data.sellPrice;
     }
 
-    /// <summary>
-    /// 売却されたときの処理
-    /// </summary>
-    public void Sell()
-    {
-        int price = GetSellPrice();
-        string itemName = fishData != null ? fishData.fishName : gameObject.name;
-
-        // Walletを使ってお金を増やす
-        if (Wallet.Instance != null)
-        {
-            Wallet.Instance.AddGold(price);
-        }
-        else
-        {
-            Debug.LogWarning("シーン内にWalletが見つかりませんでした！");
-        }
-
-        Debug.Log($"【売却】{itemName} を {price}G で売却しました！");
-
-        // オブジェクトを消去
-        Destroy(gameObject);
-    }
 }
