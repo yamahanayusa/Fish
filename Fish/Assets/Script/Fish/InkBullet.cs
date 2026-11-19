@@ -17,8 +17,11 @@ public class InkBullet : MonoBehaviour
     // Is Trigger にチェックを入れた場合は OnTriggerEnter を使います
     private void OnTriggerEnter(Collider other)
     {
-        // 撃ったボス自身（SquidBoss）に触れた場合は何もせずすり抜ける
-        if (other.GetComponent<SquidBoss>() != null) return;
+        // 撃ったボス自身、またはその子オブジェクト（DashAttackHitboxなど）に触れた場合はすり抜ける
+        if (other.GetComponentInParent<SquidBoss>() != null) return;
+
+        // 他の攻撃判定や索敵範囲などのTriggerコライダーに触れた場合もすり抜ける
+        if (other.isTrigger) return;
 
         // プレイヤーに当たった場合
         if (other.CompareTag("Player"))

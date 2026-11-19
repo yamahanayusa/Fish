@@ -50,11 +50,13 @@ public class Gun : ToulBase
         {
             if (CanFier())
             {
+                int layerMask = ~(1 << LayerMask.NameToLayer("Attack"));
+
                 Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
                 RaycastHit hit;
                 Vector3 targetPos = Vector3.zero;
 
-                if (Physics.Raycast(ray, out hit, 100.0f))
+                if (Physics.Raycast(ray, out hit, 100.0f,layerMask))
                 {
                     targetPos = hit.point;
                 }

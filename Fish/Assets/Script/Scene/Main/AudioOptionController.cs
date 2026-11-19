@@ -14,19 +14,17 @@ public class AudioOptionController : MonoBehaviour
     [SerializeField] private TextMeshProUGUI musicValueText;
     [SerializeField] private TextMeshProUGUI sfxValueText;
 
-    private void Start()
+    private void OnEnable()
     {
-        // 1. 保存されている設定値を読み込む（まだ保存されていない初回起動時は 1.0f にする）
+        // オプション画面が開かれるたびに保存値を読み込んでUIに反映する
         float savedMaster = PlayerPrefs.GetFloat("MasterVolume", 1.0f);
         float savedMusic = PlayerPrefs.GetFloat("MusicVolume", 1.0f);
         float savedSFX = PlayerPrefs.GetFloat("SFXVolume", 1.0f);
 
-        // 2. 読み込んだ値をスライダーに反映する
         if (masterSlider != null) masterSlider.value = savedMaster;
         if (musicSlider != null) musicSlider.value = savedMusic;
         if (sfxSlider != null) sfxSlider.value = savedSFX;
 
-        // 3. テキストの表示も更新する
         if (masterValueText != null) masterValueText.text = savedMaster.ToString("F2");
         if (musicValueText != null) musicValueText.text = savedMusic.ToString("F2");
         if (sfxValueText != null) sfxValueText.text = savedSFX.ToString("F2");
@@ -36,7 +34,9 @@ public class AudioOptionController : MonoBehaviour
     {
         if (masterValueText != null) masterValueText.text = value.ToString("F2");
 
-        // ★ スライダーが動くたびに値をセーブする
+        // SoundManager経由で実際の音量を変更
+        if (SoundManager.Instance != null) SoundManager.Instance.SetMasterVolume(value);
+
         PlayerPrefs.SetFloat("MasterVolume", value);
         PlayerPrefs.Save();
     }
@@ -45,7 +45,9 @@ public class AudioOptionController : MonoBehaviour
     {
         if (musicValueText != null) musicValueText.text = value.ToString("F2");
 
-        // ★ スライダーが動くたびに値をセーブする
+        // SoundManager経由で実際の音量を変更
+        if (SoundManager.Instance != null) SoundManager.Instance.SetMusicVolume(value);
+
         PlayerPrefs.SetFloat("MusicVolume", value);
         PlayerPrefs.Save();
     }
@@ -54,7 +56,9 @@ public class AudioOptionController : MonoBehaviour
     {
         if (sfxValueText != null) sfxValueText.text = value.ToString("F2");
 
-        // ★ スライダーが動くたびに値をセーブする
+        // SoundManager経由で実際の音量を変更
+        if (SoundManager.Instance != null) SoundManager.Instance.SetSFXVolume(value);
+
         PlayerPrefs.SetFloat("SFXVolume", value);
         PlayerPrefs.Save();
     }

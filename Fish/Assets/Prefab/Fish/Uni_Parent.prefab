@@ -11,11 +11,11 @@ GameObject:
   - component: {fileID: 3305493190714399490}
   - component: {fileID: 5888244959026737942}
   - component: {fileID: 1984065524575305837}
-  - component: {fileID: 5425368675009257260}
   - component: {fileID: 8369996457677762542}
+  - component: {fileID: 8166318726893276514}
   m_Layer: 0
   m_Name: Uni_Parent
-  m_TagString: Untagged
+  m_TagString: Fish_Uni
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,20 +81,6 @@ MonoBehaviour:
   attackJumpForce: 7
   attackAngleOffset: 20.7
   isDead: 0
---- !u!114 &5425368675009257260
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2519893597770891407}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 629bdccc61f7ce741ae07136de1d1eba, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AttackingFishTest
-  minAttackInterval: 1
-  maxAttackInterval: 2
 --- !u!135 &8369996457677762542
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -116,6 +102,20 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &8166318726893276514
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2519893597770891407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 629bdccc61f7ce741ae07136de1d1eba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackingFishTest
+  minAttackInterval: 1
+  maxAttackInterval: 2
 --- !u!1001 &1215270437837091089
 PrefabInstance:
   m_ObjectHideFlags: 0
