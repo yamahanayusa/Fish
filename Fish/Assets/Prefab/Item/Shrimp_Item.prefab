@@ -43,9 +43,10 @@ GameObject:
   - component: {fileID: 4367847413407514205}
   - component: {fileID: 6492578910649352072}
   - component: {fileID: 7822281020404758910}
+  - component: {fileID: 4656171819812635792}
   m_Layer: 0
   m_Name: Shrimp_Item
-  m_TagString: Item
+  m_TagString: Item_Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -130,6 +131,20 @@ MonoBehaviour:
   rHand_: {fileID: 6634930279558465656}
   lHand_: {fileID: 6634930279558465656}
   fishData: {fileID: 11400000, guid: 8529a0e5b717e6e41a1646f08bc9b2df, type: 2}
+--- !u!114 &4656171819812635792
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6860220448765188178}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e52c2ea4932b044e953ace7572cadec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SellableItem
+  priceType: 1
+  fixedPrice: 10
 --- !u!1001 &504841764299504498
 PrefabInstance:
   m_ObjectHideFlags: 0

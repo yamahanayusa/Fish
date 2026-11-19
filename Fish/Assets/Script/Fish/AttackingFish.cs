@@ -108,7 +108,8 @@ public class AttackingFish : MonoBehaviour
         // ドロップ用Prefabが設定されていれば、現在の位置・回転で生成
         if (fishItemPrefab != null)
         {
-            Instantiate(fishItemPrefab, transform.position, transform.rotation);
+            SellableItem item =  Instantiate(fishItemPrefab, transform.position, transform.rotation).GetComponent<SellableItem>();
+            item.InitializeFish(fishData);
         }
         else
         {

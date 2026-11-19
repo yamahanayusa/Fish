@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 2148897162889860965}
   - component: {fileID: 331704636642020637}
   - component: {fileID: 247004077065501137}
+  - component: {fileID: 471791150833481068}
   m_Layer: 0
   m_Name: Uni_Item
-  m_TagString: Item
+  m_TagString: Item_Fish
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -98,6 +99,20 @@ MonoBehaviour:
   rHand_: {fileID: 0}
   lHand_: {fileID: 0}
   fishData: {fileID: 11400000, guid: 14f07b189290bb4498017869d5aec707, type: 2}
+--- !u!114 &471791150833481068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8347547083422208138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0e52c2ea4932b044e953ace7572cadec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SellableItem
+  priceType: 1
+  fixedPrice: 10
 --- !u!1001 &8648602806961219756
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -4,10 +4,8 @@
 TagManager:
   serializedVersion: 3
   tags:
-  - Item
-  - Fish_Squid
-  - Fish_Shrimp
-  - Fish_Uni
+  - Item_Fish
+  - Grill
   layers:
   - Default
   - TransparentFX
